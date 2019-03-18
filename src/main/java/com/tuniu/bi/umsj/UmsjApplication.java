@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UmsjApplication {
 
     public static void main(String[] args) {
+        // 完全禁用 devtools
+        // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(UmsjApplication.class, args);
     }
 

@@ -9,9 +9,14 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
-
-        model.addAttribute("title", "首页");
+        model.addAttribute("systemCode", "UMSJ");
+        model.addAttribute("systemName", "平台管理系统");
         return "index/index";
     }
 
+    @RequestMapping("/info")
+    public String info(Model model) {
+        model.addAttribute("systemCode", "UMSJ");
+        return "index/info";
+    }
 }
