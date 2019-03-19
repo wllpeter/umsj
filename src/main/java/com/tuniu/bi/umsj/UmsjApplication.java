@@ -15,8 +15,8 @@ public class UmsjApplication {
         SpringApplication.run(UmsjApplication.class, args);
     }
 
-    @RequestMapping("/hello")
-    public String hello() {
-        return "UMSJ!";
+    @RequestMapping("/ping")
+    public String ping() {
+        return "pong! ";
     }
 }
