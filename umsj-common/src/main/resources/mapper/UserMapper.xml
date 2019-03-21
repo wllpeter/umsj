@@ -5,12 +5,12 @@
 <mapper namespace="com.tuniu.bi.umsj.mapper.UserMapper">
     <resultMap id="UserResultMap" type="com.tuniu.bi.umsj.mapper.entity.UserEntity">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
     </resultMap>
 
     <sql id="BaseColumn">
-        id, name, password
+        id, username, password
     </sql>
     <select id="findByPk" resultMap="UserResultMap">
         SELECT
