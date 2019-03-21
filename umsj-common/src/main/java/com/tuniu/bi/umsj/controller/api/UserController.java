@@ -1,13 +1,21 @@
 package com.tuniu.bi.umsj.controller.api;
 
+import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.mapper.entity.UserEntity;
+import com.tuniu.bi.umsj.service.OaClientService;
 import com.tuniu.bi.umsj.service.UserService;
+import com.tuniu.bi.umsj.utils.ResponseUtils;
+import com.tuniu.bi.umsj.vo.Response;
+import com.tuniu.bi.umsj.vo.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +25,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OaClientService oaClientService;
+
     @RequestMapping("/login")
     public Map<String, Object> index() {
         Map<String, Object> data = new HashMap<>();
@@ -33,5 +45,18 @@ public class UserController {
     public ResponseEntity<UserEntity> findUser(@Param("id") Integer id) {
         UserEntity byId = userService.findById(id);
         return ResponseEntity.ok(byId);
+    }
+
+    /**
+     * 登录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Response<User> login(@RequestBody @Valid User user) throws AbstractException {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        oaClientService.checkOaAccount(username, password);
+        return ResponseUtils.success();
     }
 }

@@ -1,20 +1,26 @@
 package com.tuniu.bi.umsj.vo;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 用户类
+ *
+ * @author zhangwei21
  */
 public class User {
 
-    private  String usernmae;
+    @NotBlank(message = "用户名不能为空")
+    private  String username;
 
+    @NotBlank(message = "密码不能为空")
     private String password;
 
-    public String getUsernmae() {
-        return usernmae;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsernmae(String usernmae) {
-        this.usernmae = usernmae;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

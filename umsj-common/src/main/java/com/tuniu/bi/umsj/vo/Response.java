@@ -6,10 +6,6 @@ package com.tuniu.bi.umsj.vo;
  * @author zhangwei21
  */
 public class Response<T> {
-    /**
-     * 默认的成功返回码
-     */
-    public static final int OK_CODE = 710000;
 
     private Boolean success;
     private Integer code;
