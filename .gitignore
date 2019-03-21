@@ -25,3 +25,8 @@
 /build/
 
 .mvn
+
+umsj-cluster/target/
+umsj-common/target/
+umsj-uds/target/
+umsj-web/target/
