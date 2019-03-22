@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tuniu.bi.umsj.mapper.UserMapper">
-    <resultMap id="UserResultMap" type="com.tuniu.bi.umsj.mapper.entity.UserEntity">
+    <resultMap id="BaseResultMap" type="com.tuniu.bi.umsj.mapper.entity.UserEntity">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
@@ -12,10 +12,67 @@
     <sql id="BaseColumn">
         id, username, password
     </sql>
-    <select id="findByPk" resultMap="UserResultMap">
+    <select id="findByPk" resultMap="BaseResultMap">
         SELECT
         <include refid="BaseColumn"/>
         FROM user
         WHERE id = #{id}
     </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insert" parameterType="com.tuniu.bi.umsj.mapper.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="fullName != null">
+                full_name,
+            </if>
+            <if test="jobTitle != null">
+                job_title,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="workNo != null">
+                work_no,
+            </if>
+            <if test="roleCodes != null">
+                role_codes,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="fullName != null">
+                #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="jobTitle != null">
+                #{jobTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="workNo != null">
+                #{workNo,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCodes != null">
+                #{roleCodes,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 </mapper>

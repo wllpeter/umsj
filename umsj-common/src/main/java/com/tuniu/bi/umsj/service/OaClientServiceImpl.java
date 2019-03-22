@@ -1,11 +1,21 @@
 package com.tuniu.bi.umsj.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.tuniu.bi.umsj.entitydo.UcQuerySalesRequestDO;
+import com.tuniu.bi.umsj.entitydo.UcQuerySalesResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
+import com.tuniu.bi.umsj.mapper.entity.UserEntity;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.naming.Context;
@@ -14,7 +24,12 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Oa相关服务类
@@ -38,6 +53,29 @@ public class OaClientServiceImpl implements OaClientService {
     @Value("${ldap.security.principal.suffix}")
     private String suffix;
 
+    @Value("${rest.oa.url}")
+    private String oaUrl;
+
+    @Value("${rest.oa.key}")
+    private String oaKey;
+
+    @Value("${rest.oa.system}")
+    private String oaSystem;
+
+
+    /**
+     * 查询员工信息
+     */
+    private static final String SERVICE_QUERY_SALES = "query_sales";
+    /**
+     * 查询部门信息
+     */
+    private static final String SERVICE_QUERY_DEPTS = "query_depts";
+
+    /**
+     * 根据拼音查询
+     */
+    private static final int UC_SALES_QUERY_TYPE_PINYIN_NAME = 4;
     /**
      * ldap认证查询的属性
      */
@@ -79,5 +117,62 @@ public class OaClientServiceImpl implements OaClientService {
             LOGGER.error("用户[" + username + "]认证出错!" + e.getMessage());
             throw new CommonException("认证出错!系统异常!");
         }
+    }
+
+    @Override
+    public UserEntity getUser(String username) throws AbstractException {
+        String url = oaUrl;
+        UcQuerySalesRequestDO ucQuerySalesRequestDO = new UcQuerySalesRequestDO();
+        ucQuerySalesRequestDO.setKey(oaKey);
+        ucQuerySalesRequestDO.setSubSystem(oaSystem);
+        UcQuerySalesRequestDO.Data data = new UcQuerySalesRequestDO.Data();
+        UcQuerySalesRequestDO.Condition condition = new UcQuerySalesRequestDO.Condition();
+        condition.setType(UC_SALES_QUERY_TYPE_PINYIN_NAME);
+        condition.setValue(username);
+        data.setService(SERVICE_QUERY_SALES);
+        data.setCond(Arrays.asList(condition));
+        ucQuerySalesRequestDO.setData(data);
+
+        byte[] bytes = JSONObject.toJSONBytes(ucQuerySalesRequestDO);
+        String param = Base64.encodeBase64String(bytes);
+        if (url.indexOf("?") != -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        url = url + "?" + param;
+        OkHttpClient client = new OkHttpClient();
+        Request build = new Request.Builder().url(url).build();
+        Response response = null;
+        UcQuerySalesResponseDO ucQuerySalesResponseDO = null;
+        UserEntity userEntity = null;
+        try {
+            response = client.newCall(build).execute();
+            if (!response.isSuccessful()) {
+                //  查询不成功
+                throw new CommonException("查询不到员工信息");
+            }
+            // base64解密
+            byte[] bytes1 = Base64.decodeBase64(response.body().bytes());
+            ucQuerySalesResponseDO = JSONObject.parseObject(bytes1, UcQuerySalesResponseDO.class);
+        } catch (IOException e) {
+            LOGGER.error("访问oa接口异常", e);
+            throw new CommonException("访问oa接口异常", e);
+        }
+        if (!ucQuerySalesResponseDO.getSuccess()) {
+            throw new CommonException(ucQuerySalesResponseDO.getMsg());
+        }
+        if (ucQuerySalesResponseDO != null && ucQuerySalesResponseDO.getData() != null) {
+            Map<String, UcQuerySalesResponseDO.Employees> sales = ucQuerySalesResponseDO.getData().getSales();
+            if (!CollectionUtils.isEmpty(sales)) {
+                UcQuerySalesResponseDO.Employees employee = sales.get(username);
+                if (employee != null) {
+                    userEntity = new UserEntity();
+                    userEntity.setUsername(username);
+                    userEntity.setDepartment(employee.getDept());
+                    userEntity.setWorkNo(employee.getWorkNum());
+                    userEntity.setFullName(employee.getName());
+                }
+            }
+        }
+        return userEntity;
     }
 }

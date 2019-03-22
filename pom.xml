@@ -72,5 +72,25 @@
             <version>27.0.1-jre</version>
         </dependency>
 
+        <!-- 引入fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.56</version>
+        </dependency>
+        <!-- okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.2.0</version>
+        </dependency>
     </dependencies>
+    <!--
+    <repositories>
+        <repository>
+            <id>tuniu</id>
+            <url>http://nexus.tuniu.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories> -->
+
 </project>

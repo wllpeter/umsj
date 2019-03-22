@@ -53,10 +53,13 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Response<User> login(@RequestBody @Valid User user) throws AbstractException {
+    public Response<UserEntity> login(@RequestBody @Valid User user) throws AbstractException {
         String username = user.getUsername();
         String password = user.getPassword();
+        // ldap 认证
         oaClientService.checkOaAccount(username, password);
-        return ResponseUtils.success();
+        // 自动创建账户信息
+        UserEntity userEntity = userService.init(username);
+        return ResponseUtils.success(userEntity);
     }
 }

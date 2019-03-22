@@ -16,6 +16,7 @@ public class CommonException extends AbstractException {
         super(message, ERROR_CODE);
     }
 
+
     public CommonException(String message, Throwable throwable) {
         super(message, ERROR_CODE, throwable);
     }

@@ -1,5 +1,7 @@
 package com.tuniu.bi.umsj.mapper.entity;
 
+import java.util.Date;
+
 /**
  * 用户实例
  *
@@ -12,6 +14,21 @@ public class UserEntity {
     private String username;
 
     private String password;
+
+    private String fullName;
+
+    private String jobTitle;
+
+    private String department;
+
+    private String workNo;
+
+    private String roleCodes;
+
+    private String createdAt;
+
+    private String updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -35,5 +52,61 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getWorkNo() {
+        return workNo;
+    }
+
+    public void setWorkNo(String workNo) {
+        this.workNo = workNo;
+    }
+
+    public String getRoleCodes() {
+        return roleCodes;
+    }
+
+    public void setRoleCodes(String roleCodes) {
+        this.roleCodes = roleCodes;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

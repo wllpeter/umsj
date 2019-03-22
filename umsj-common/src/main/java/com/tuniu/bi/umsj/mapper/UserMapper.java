@@ -18,4 +18,18 @@ public interface UserMapper {
      */
     UserEntity findByPk(@Param("id") Integer id);
 
+
+    /**
+     * 根据用户名查询
+     * @param username
+     * @return
+     */
+    UserEntity findByUsername(@Param("username") String username);
+
+    /**
+     * 插入用户信息
+     * @param userEntity
+     * @return
+     */
+    int insert(UserEntity userEntity);
 }
