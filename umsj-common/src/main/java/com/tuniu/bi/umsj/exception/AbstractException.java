@@ -7,8 +7,6 @@ package com.tuniu.bi.umsj.exception;
  */
 public abstract class AbstractException extends Exception {
 
-
-
     private final int code;
 
     public AbstractException(String message, int code) {

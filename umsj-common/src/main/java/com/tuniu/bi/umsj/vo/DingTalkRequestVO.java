@@ -1,5 +1,8 @@
 package com.tuniu.bi.umsj.vo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -7,14 +10,17 @@ import java.util.List;
  * @author zhangwei21
  * wiki http://wiki.tuniu.org/pages/viewpage.action?pageId=82722329
  */
-public class DingTalkReqeustVO {
+public class DingTalkRequestVO {
 
+    @NotNull(message = "发送的消息类型不能为空")
     private Integer msgType;
 
     private String title;
 
+    @NotBlank(message = "发送的内容不能为空")
     private String content;
 
+    @NotEmpty(message = "钉钉发送人员不能为空")
     private List<Integer> uids;
 
     public Integer getMsgType() {

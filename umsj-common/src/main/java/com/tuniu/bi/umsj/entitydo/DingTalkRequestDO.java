@@ -1,12 +1,12 @@
 package com.tuniu.bi.umsj.entitydo;
 
-import com.tuniu.bi.umsj.vo.DingTalkReqeustVO;
+import com.tuniu.bi.umsj.vo.DingTalkRequestVO;
 
 /**
  * 钉钉请求类
  * @author zhangwei21
  */
-public class DingTalkRequestDO extends DingTalkReqeustVO {
+public class DingTalkRequestDO extends DingTalkRequestVO {
 
     private Integer stepId;
 

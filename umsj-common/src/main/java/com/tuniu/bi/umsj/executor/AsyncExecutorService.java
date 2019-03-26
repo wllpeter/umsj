@@ -14,16 +14,16 @@ import java.util.concurrent.*;
 @Component
 public class AsyncExecutorService {
 
-    @Value("${executorPool.executorMaxPoolSize}")
+    @Value("${executorPool.executor-max-pool-size}")
     private int executorMaxPoolSize;
 
-    @Value("${executorPool.executorCoreSize}")
+    @Value("${executorPool.executor-core-size}")
     private int executorCoreSize;
 
-    @Value("${executorPool.keepAliveSeconds}")
+    @Value("${executorPool.keep-alive-seconds}")
     private int keepAliveSeconds;
 
-    @Value("${executorPool.queueCapacity}")
+    @Value("${executorPool.queue-capacity}")
     private int queueCapacity;
 
     private ExecutorService executorService;

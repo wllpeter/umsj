@@ -1,15 +1,16 @@
 package com.tuniu.bi.umsj.exception;
 
+/**
+ * @author zhangwei21
+ */
 public class CommonException extends AbstractException {
 
-    public static final int ERROR_CODE = 710007;
+    private static final int ERROR_CODE = 710007;
 
-    public static final String SQL_EXIST = "SQL别名已存在!";
-    public static final String DATA_LIMIT = "已限制一分钟调用次数10次!";
-    public static final String BAD_PARAM = "参数类型不匹配!";
+    private static final String MSG = "逻辑处理异常";
 
     public CommonException() {
-        super("逻辑处理异常", ERROR_CODE);
+        super(MSG, ERROR_CODE);
     }
 
     public CommonException(String message) {

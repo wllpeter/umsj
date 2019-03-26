@@ -1,12 +1,11 @@
 package com.tuniu.bi.umsj.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPObject;
 import com.tuniu.bi.umsj.entitydo.DingTalkRequestDO;
 import com.tuniu.bi.umsj.entitydo.DingTalkResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
-import com.tuniu.bi.umsj.vo.DingTalkReqeustVO;
+import com.tuniu.bi.umsj.vo.DingTalkRequestVO;
 import okhttp3.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -25,14 +24,14 @@ public class DingTalkServiceImpl implements DingTalkService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DingTalkServiceImpl.class);
 
-    @Value("${dingtalk.stepId}")
+    @Value("${dingtalk.step-id}")
     private Integer stepId;
 
     @Value("${dingtalk.url}")
     private String dingTalkUrl;
 
     @Override
-    public void sendPersonalMsg(DingTalkReqeustVO requestVO) throws AbstractException {
+    public void sendPersonalMsg(DingTalkRequestVO requestVO) throws AbstractException {
         OkHttpClient okHttpClient = new OkHttpClient();
         DingTalkRequestDO dingTalkDO = new DingTalkRequestDO();
         BeanUtils.copyProperties(requestVO, dingTalkDO);
@@ -46,7 +45,6 @@ public class DingTalkServiceImpl implements DingTalkService {
                 throw new CommonException("发送钉钉消息失败");
             }
             byte[] bytes = response.body().bytes();
-            System.out.println(new String(bytes));
             byte[] bytes1 = Base64.decodeBase64(bytes);
             DingTalkResponseDO responseDO = JSONObject.parseObject(bytes1, DingTalkResponseDO.class);
             if (!responseDO.getSuccess()) {
