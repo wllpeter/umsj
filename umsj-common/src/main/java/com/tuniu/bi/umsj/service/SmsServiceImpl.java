@@ -30,7 +30,7 @@ public class SmsServiceImpl implements  SmsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class);
 
     @Value("${sms.template-id}")
-    private Integer tmplateId;
+    private Integer templateId;
 
     @Value("${sms.url}")
     private String url;
@@ -52,7 +52,7 @@ public class SmsServiceImpl implements  SmsService {
     @Override
     public void sendSms(SmsRequestVO smsRequestVO) throws AbstractException {
         SmsRequestDO smsRequestDO = new SmsRequestDO();
-        smsRequestDO.setTemplateId(tmplateId);
+        smsRequestDO.setTemplateId(templateId);
         smsRequestDO.setSystemId(systemId);
         smsRequestDO.setMobileNum(smsRequestVO.getMobileNum());
         smsRequestDO.setClientIp(clientIp);
