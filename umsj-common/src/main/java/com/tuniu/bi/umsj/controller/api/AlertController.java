@@ -1,16 +1,15 @@
 package com.tuniu.bi.umsj.controller.api;
 
+import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.exception.AbstractException;
+import com.tuniu.bi.umsj.exception.InvalidParamException;
 import com.tuniu.bi.umsj.service.DingTalkService;
 import com.tuniu.bi.umsj.service.EmailService;
 import com.tuniu.bi.umsj.service.SmsService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
-import com.tuniu.bi.umsj.vo.DingTalkRequestVO;
-import com.tuniu.bi.umsj.vo.EmailRequestVO;
-import com.tuniu.bi.umsj.vo.Response;
-import com.tuniu.bi.umsj.vo.SmsRequestVO;
+import com.tuniu.bi.umsj.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -72,6 +71,37 @@ public class AlertController {
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
     public Response sendEmail(@RequestBody @Valid SmsRequestVO smsRequestVO) throws AbstractException {
         smsService.sendSms(smsRequestVO);
+        return ResponseUtils.success();
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param messageRequestVO
+     * @return
+     * @throws AbstractException
+     */
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+    public Response sendMessage(@RequestBody MessageRequestVO messageRequestVO) throws AbstractException {
+        if (messageRequestVO == null || messageRequestVO.getType() == null || Strings.isNullOrEmpty(messageRequestVO.getContent())
+                || CollectionUtils.isEmpty(messageRequestVO.getNames())) {
+            throw new InvalidParamException();
+        }
+        Integer type = messageRequestVO.getType();
+        switch (type) {
+            case 1:
+                dingTalkService.sendMessage(messageRequestVO);
+                break;
+            case 2:
+                emailService.sendMessage(messageRequestVO);
+                break;
+            case 3:
+                smsService.sendMessage(messageRequestVO);
+                break;
+            default:
+                throw new InvalidParamException("暂不支持的发消息类型");
+        }
+
         return ResponseUtils.success();
     }
 }

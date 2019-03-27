@@ -5,18 +5,21 @@ import com.tuniu.bi.umsj.entitydo.SmsRequestDO;
 import com.tuniu.bi.umsj.entitydo.SmsResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
+import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.vo.MessageRequestVO;
 import com.tuniu.bi.umsj.vo.SmsRequestVO;
 import okhttp3.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author zhangwei21
@@ -37,6 +40,14 @@ public class SmsServiceImpl implements  SmsService {
 
     @Value("${sms.client-ip}")
     private String clientIp;
+
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 短信长度
+     */
+    private static final int MAX_LENGTH = 350;
 
     @Override
     public void sendSms(SmsRequestVO smsRequestVO) throws AbstractException {
@@ -68,5 +79,21 @@ public class SmsServiceImpl implements  SmsService {
             LOGGER.error("发送SMS消息错误", e);
             throw new CommonException("发送SMS消息错误", e);
         }
+    }
+
+    @Override
+    public void sendMessage(MessageRequestVO messageRequestVO) throws AbstractException {
+        // 查询user表,查询salerId，phone
+        List<String> phones = userService.obtainReceiver(messageRequestVO.getType(), messageRequestVO.getNames());
+        if (CollectionUtils.isEmpty(phones)) {
+            throw new InvalidParamException("用户的手机号码为空");
+        }
+        if (messageRequestVO.getContent().length() > 350) {
+            throw new InvalidParamException("发送短信的内容太长");
+        }
+        SmsRequestVO smsRequestVO = new SmsRequestVO();
+        smsRequestVO.setContent(messageRequestVO.getContent());
+        smsRequestVO.setMobileNum(phones);
+        sendSms(smsRequestVO);
     }
 }

@@ -1,7 +1,5 @@
 package com.tuniu.bi.umsj.mapper.entity;
 
-import java.util.Date;
-
 /**
  * 用户实例
  *
@@ -24,6 +22,10 @@ public class UserEntity {
     private String workNo;
 
     private String roleCodes;
+
+    private Integer salerId;
+
+    private String phone;
 
     private String createdAt;
 
@@ -108,5 +110,21 @@ public class UserEntity {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getSalerId() {
+        return salerId;
+    }
+
+    public void setSalerId(Integer salerId) {
+        this.salerId = salerId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

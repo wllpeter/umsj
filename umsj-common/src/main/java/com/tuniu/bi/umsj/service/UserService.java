@@ -3,6 +3,8 @@ package com.tuniu.bi.umsj.service;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.mapper.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * 用户服务类
  *
@@ -23,4 +25,13 @@ public interface UserService {
      * @throws AbstractException
      */
     UserEntity init(String username) throws AbstractException;
+
+
+    /**
+     * 获取接收者信息
+     * @param type
+     * @param names
+     * @return
+     */
+    List obtainReceiver(Integer type, List<String> names);
 }

@@ -5,16 +5,22 @@ import com.tuniu.bi.umsj.entitydo.DingTalkRequestDO;
 import com.tuniu.bi.umsj.entitydo.DingTalkResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
+import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.mapper.UserMapper;
 import com.tuniu.bi.umsj.vo.DingTalkRequestVO;
+import com.tuniu.bi.umsj.vo.MessageRequestVO;
 import okhttp3.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author zhangwei21
@@ -29,6 +35,12 @@ public class DingTalkServiceImpl implements DingTalkService {
 
     @Value("${dingtalk.url}")
     private String dingTalkUrl;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void sendPersonalMsg(DingTalkRequestVO requestVO) throws AbstractException {
@@ -54,6 +66,20 @@ public class DingTalkServiceImpl implements DingTalkService {
             LOGGER.error("发送钉钉消息错误", e);
             throw new CommonException("发送钉钉消息错误", e);
         }
+    }
 
+    @Override
+    public void sendMessage(MessageRequestVO messageRequestVO) throws AbstractException {
+        // 查询user表,查询salerId，phone
+        List<Integer> salerIds = userService.obtainReceiver(messageRequestVO.getType(), messageRequestVO.getNames());
+        if (CollectionUtils.isEmpty(salerIds)) {
+            throw new InvalidParamException("用户的saleId为空");
+        }
+        DingTalkRequestVO dingTalkRequestVO = new DingTalkRequestVO();
+        dingTalkRequestVO.setMsgType(1);
+        dingTalkRequestVO.setContent(messageRequestVO.getContent());
+        dingTalkRequestVO.setTitle(messageRequestVO.getTitle());
+        dingTalkRequestVO.setUids(salerIds);
+        sendPersonalMsg(dingTalkRequestVO);
     }
 }
