@@ -68,12 +68,12 @@ public class UserServiceImpl implements UserService {
                     ret.add(salerId);
                 }
             } else if (type == 2) {
+                ret.add(name + EMAIL_SUFFIX);
+            } else if (type == 3) {
                 String phone = user.getPhone();
                 if (!Strings.isNullOrEmpty(phone)) {
                     ret.add(phone);
                 }
-            } else if (type == 3) {
-                ret.add(name + EMAIL_SUFFIX);
             } else {
                 LOGGER.error("暂不支持的类型");
             }
