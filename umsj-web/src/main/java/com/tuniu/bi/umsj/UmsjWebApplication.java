@@ -21,18 +21,12 @@ public class UmsjWebApplication {
         SpringApplication.run(UmsjWebApplication.class, args);
     }
 
-//    @Bean
-//    public ServletWebServerFactory webServerFactory() {
-//        JettyServletWebServerFactory factory = new JettyServletWebServerFactory();
-//        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
-//        return factory;
-//    }
-
     @RequestMapping("/ping")
     public String ping() {
         // 获取jdk版本号
         String s = System.getProperty("java.version");
-        return "pong! " + s;
+        String active = System.getProperty("spring.profiles.active");
+        return "pong! " + s + "|" + active;
 
     }
 }
