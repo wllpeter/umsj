@@ -32,3 +32,5 @@ umsj-uds/target/
 umsj-web/target/
 #####log####
 *.log
+*.log.*.gz
+*.log.*.tmp
