@@ -119,21 +119,19 @@ public class AlertController {
      */
     @RequestMapping(value = "/webHookEmail", method = RequestMethod.POST)
     public Response webHookEmail(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
-        System.out.println(JSONObject.toJSONString(requestVO));
         webHookService.sendMessage(requestVO,1);
         return ResponseUtils.success();
     }
 
     /**
-     * webHookEmailSms
+     * webHookEmailDing
      *
      * @param requestVO
      * @return
      * @throws AbstractException
      */
-    @RequestMapping(value = "/webHookEmailSms", method = RequestMethod.POST)
-    public Response webHookEmailSms(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
-        System.out.println(JSONObject.toJSONString(requestVO));
+    @RequestMapping(value = "/webHookEmailDing", method = RequestMethod.POST)
+    public Response webHookEmailDing(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
         webHookService.sendMessage(requestVO,2);
         return ResponseUtils.success();
     }
