@@ -17,7 +17,7 @@ public interface WebHookService {
      *
      * @param requestVO
      */
-    void sendMessage(AlertManagerRequestVO requestVO,int businessType) throws AbstractException;
+    void sendMessage(AlertManagerRequestVO requestVO) throws AbstractException;
 
 
 }

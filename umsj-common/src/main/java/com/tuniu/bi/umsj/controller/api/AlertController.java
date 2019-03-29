@@ -111,28 +111,15 @@ public class AlertController {
     }
 
     /**
-     * webHookEmail
+     * webHook
      *
      * @param requestVO
      * @return
      * @throws AbstractException
      */
-    @RequestMapping(value = "/webHookEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/webHook", method = RequestMethod.POST)
     public Response webHookEmail(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
-        webHookService.sendMessage(requestVO,1);
-        return ResponseUtils.success();
-    }
-
-    /**
-     * webHookEmailDing
-     *
-     * @param requestVO
-     * @return
-     * @throws AbstractException
-     */
-    @RequestMapping(value = "/webHookEmailDing", method = RequestMethod.POST)
-    public Response webHookEmailDing(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
-        webHookService.sendMessage(requestVO,2);
+        webHookService.sendMessage(requestVO);
         return ResponseUtils.success();
     }
 
