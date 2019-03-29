@@ -1,5 +1,6 @@
 package com.tuniu.bi.umsj.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.InvalidParamException;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
+import com.tuniu.bi.umsj.service.WebHookService;
+
 
 /**
  * 告警api(集成钉钉，邮箱，微信)
@@ -34,6 +36,9 @@ public class AlertController {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private WebHookService webHookService;
 
     /**
      * 发送钉钉消息
@@ -104,4 +109,33 @@ public class AlertController {
 
         return ResponseUtils.success();
     }
+
+    /**
+     * webHookEmail
+     *
+     * @param requestVO
+     * @return
+     * @throws AbstractException
+     */
+    @RequestMapping(value = "/webHookEmail", method = RequestMethod.POST)
+    public Response webHookEmail(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
+        System.out.println(JSONObject.toJSONString(requestVO));
+        webHookService.sendMessage(requestVO,1);
+        return ResponseUtils.success();
+    }
+
+    /**
+     * webHookEmailSms
+     *
+     * @param requestVO
+     * @return
+     * @throws AbstractException
+     */
+    @RequestMapping(value = "/webHookEmailSms", method = RequestMethod.POST)
+    public Response webHookEmailSms(@RequestBody AlertManagerRequestVO requestVO) throws AbstractException {
+        System.out.println(JSONObject.toJSONString(requestVO));
+        webHookService.sendMessage(requestVO,2);
+        return ResponseUtils.success();
+    }
+
 }
