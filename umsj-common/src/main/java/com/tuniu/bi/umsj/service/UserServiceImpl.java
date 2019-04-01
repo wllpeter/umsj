@@ -1,13 +1,19 @@
 package com.tuniu.bi.umsj.service;
 
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.exception.AbstractException;
+import com.tuniu.bi.umsj.mapper.OaUserMapper;
 import com.tuniu.bi.umsj.mapper.UserMapper;
+import com.tuniu.bi.umsj.mapper.entity.OaUserEntity;
+import com.tuniu.bi.umsj.mapper.entity.OaUserParamEntity;
 import com.tuniu.bi.umsj.mapper.entity.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private OaClientService oaClientService;
+
+    @Autowired
+    private OaUserMapper oaUserMapper;
 
     /**
      * 邮箱后缀
@@ -80,4 +89,32 @@ public class UserServiceImpl implements UserService {
         }
         return ret;
     }
+
+    /**
+     * 同步OaUser的信息
+     */
+    @Override
+    public void syncOaUserInfo() {
+        int page = 1;
+        PageHelper.startPage(page, 5);
+        List<UserEntity> all = userMapper.findAll();
+        OaUserParamEntity oaUserParamEntity = new OaUserParamEntity();
+        // 查询在职
+        oaUserParamEntity.setIsLeave(0);
+        while (!CollectionUtils.isEmpty(all)) {
+            for (UserEntity userEntity : all) {
+                oaUserParamEntity.setUsername(userEntity.getUsername());
+                OaUserEntity one = oaUserMapper.findOne(oaUserParamEntity);
+                if (one != null) {
+                    userEntity.setSalerId(one.getSalerId());
+                    userEntity.setPhone(one.getCellphone());
+                    userMapper.update(userEntity);
+                }
+            }
+            page++;
+            PageHelper.startPage(page, 5);
+            all = userMapper.findAll();
+        }
+    }
+
 }

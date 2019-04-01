@@ -34,4 +34,9 @@ public interface UserService {
      * @return
      */
     List obtainReceiver(Integer type, List<String> names);
+
+    /**
+     * 同步oaUser的信息
+     */
+    void  syncOaUserInfo();
 }
