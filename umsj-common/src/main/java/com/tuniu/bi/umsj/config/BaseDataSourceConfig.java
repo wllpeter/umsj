@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 
 /**
@@ -36,6 +38,18 @@ public class BaseDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
+    /**
+     * 事务管理
+     *
+     * @param dataSource
+     * @return
+     * @throws SQLException
+     */
+    @Bean("baseTransactionManager")
+    @Primary
+    public DataSourceTransactionManager baseTransactionManager(@Qualifier("baseDataSource") DataSource dataSource) throws SQLException {
+        return new DataSourceTransactionManager(dataSource);
+    }
     /**
      * 创建sqlSessionFactory
      *
