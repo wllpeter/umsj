@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService {
      */
     private static final String EMAIL_SUFFIX = "@tuniu.com";
 
+    /**
+     * 初始化用户默认的角色
+     */
+    private static final String DEFAULT_ROLE_CODE = "ROLE_DEFAULT";
+
     @Override
     public UserEntity findById(Integer id) {
         UserEntity byBk = userMapper.findByPk(id);
@@ -56,6 +61,8 @@ public class UserServiceImpl implements UserService {
         }
         if (userEntity != null) {
             // 则插入
+            // 设置默认的角色
+            userEntity.setRoleCodes(DEFAULT_ROLE_CODE);
             userMapper.insert(userEntity);
         }
         return userEntity;
@@ -116,4 +123,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    @Override
+    public void supplyUserInfo(List<String> usernames) throws AbstractException {
+        UserEntity sourceUser;
+        UserEntity user;
+        for (String name : usernames) {
+            sourceUser = userMapper.findByUsername(name);
+            if (sourceUser != null) {
+                user = oaClientService.getUser(name);
+                if (user != null) {
+                    sourceUser.setSalerId(user.getSalerId());
+                    sourceUser.setPhone(user.getPhone());
+                    userMapper.update(sourceUser);
+                }
+            }
+        }
+    }
 }

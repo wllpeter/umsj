@@ -42,7 +42,7 @@ public class UcQuerySalesResponseDO extends AbstractResponseDO {
 
     public static class Employees {
 
-        private String salerId;
+        private Integer salerId;
 
         private String name;
 
@@ -52,11 +52,14 @@ public class UcQuerySalesResponseDO extends AbstractResponseDO {
 
         private String dept;
 
-        public String getSalerId() {
+        private String cellPhone;
+
+
+        public Integer getSalerId() {
             return salerId;
         }
 
-        public void setSalerId(String salerId) {
+        public void setSalerId(Integer salerId) {
             this.salerId = salerId;
         }
 
@@ -90,6 +93,14 @@ public class UcQuerySalesResponseDO extends AbstractResponseDO {
 
         public void setDept(String dept) {
             this.dept = dept;
+        }
+
+        public String getCellPhone() {
+            return cellPhone;
+        }
+
+        public void setCellPhone(String cellPhone) {
+            this.cellPhone = cellPhone;
         }
     }
 

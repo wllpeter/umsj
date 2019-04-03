@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author zhangwei21
  */
-@Service
-public class EmailServiceImpl implements EmailService {
+@Service("email")
+public class EmailServiceImpl implements MessageService {
 
     @Value("${mail.sender}")
     private String sendMail;
@@ -34,8 +34,12 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private UserService userService;
-    @Override
-    public void sendEmail(EmailRequestVO emailRequestVO) {
+
+    /**
+     * 私有化发邮件的方法，不对外提供服务
+     * @param emailRequestVO
+     */
+    private void sendEmail(EmailRequestVO emailRequestVO) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailRequestVO.getEmails().toArray(new String[emailRequestVO.getEmails().size()]));
         simpleMailMessage.setFrom(sendMail);

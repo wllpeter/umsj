@@ -25,8 +25,8 @@ import java.util.List;
 /**
  * @author zhangwei21
  */
-@Service
-public class DingTalkServiceImpl implements DingTalkService {
+@Service("dingTalk")
+public class DingTalkServiceImpl implements MessageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DingTalkServiceImpl.class);
 
@@ -42,8 +42,12 @@ public class DingTalkServiceImpl implements DingTalkService {
     @Autowired
     private UserService userService;
 
-    @Override
-    public void sendPersonalMsg(DingTalkRequestVO requestVO) throws AbstractException {
+    /**
+     * 私有化发钉钉消息的代码
+     * @param requestVO
+     * @throws AbstractException
+     */
+    private void sendPersonalMsg(DingTalkRequestVO requestVO) throws AbstractException {
         OkHttpClient okHttpClient = new OkHttpClient();
         DingTalkRequestDO dingTalkDO = new DingTalkRequestDO();
         BeanUtils.copyProperties(requestVO, dingTalkDO);

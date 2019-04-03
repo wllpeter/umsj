@@ -23,6 +23,7 @@ public interface UserService {
      * 初始化用户
      * @param username
      * @throws AbstractException
+     * @return UserEntity
      */
     UserEntity init(String username) throws AbstractException;
 
@@ -39,4 +40,11 @@ public interface UserService {
      * 同步oaUser的信息
      */
     void  syncOaUserInfo();
+
+    /**
+     * 补充用户信息
+     * @param usernames
+     * @throws AbstractException
+     */
+    void supplyUserInfo(List<String> usernames) throws AbstractException;
 }

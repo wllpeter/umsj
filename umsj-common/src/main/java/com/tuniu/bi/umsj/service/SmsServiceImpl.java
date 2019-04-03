@@ -24,8 +24,8 @@ import java.util.List;
 /**
  * @author zhangwei21
  */
-@Service
-public class SmsServiceImpl implements  SmsService {
+@Service("sms")
+public class SmsServiceImpl implements  MessageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class);
 
@@ -49,8 +49,12 @@ public class SmsServiceImpl implements  SmsService {
      */
     private static final int MAX_LENGTH = 350;
 
-    @Override
-    public void sendSms(SmsRequestVO smsRequestVO) throws AbstractException {
+    /**
+     * 私有化发短信的方法
+     * @param smsRequestVO
+     * @throws AbstractException
+     */
+    private void sendSms(SmsRequestVO smsRequestVO) throws AbstractException {
         SmsRequestDO smsRequestDO = new SmsRequestDO();
         smsRequestDO.setTemplateId(templateId);
         smsRequestDO.setSystemId(systemId);

@@ -67,4 +67,9 @@ public class Symbol {
      * S
      */
     public static final String CHAR_S = "S";
+
+    /**
+     * 问号
+     */
+    public static final String QUESTION_MARK = "?";
 }

@@ -1,6 +1,7 @@
 package com.tuniu.bi.umsj.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tuniu.bi.umsj.constant.Symbol;
 import com.tuniu.bi.umsj.entitydo.UcQuerySalesRequestDO;
 import com.tuniu.bi.umsj.entitydo.UcQuerySalesResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
@@ -58,6 +59,7 @@ public class OaClientServiceImpl implements OaClientService {
 
     @Value("${rest.oa.system}")
     private String oaSystem;
+
 
 
     /**
@@ -132,14 +134,14 @@ public class OaClientServiceImpl implements OaClientService {
 
         byte[] bytes = JSONObject.toJSONBytes(ucQuerySalesRequestDO);
         String param = Base64.encodeBase64String(bytes);
-        if (url.indexOf("?") != -1) {
-            url = url.substring(0, url.indexOf("?"));
+        if (url.indexOf(Symbol.QUESTION_MARK) != -1) {
+            url = url.substring(0, url.indexOf(Symbol.QUESTION_MARK));
         }
         url = url + "?" + param;
         OkHttpClient client = new OkHttpClient();
         Request build = new Request.Builder().url(url).build();
-        Response response = null;
-        UcQuerySalesResponseDO ucQuerySalesResponseDO = null;
+        Response response;
+        UcQuerySalesResponseDO ucQuerySalesResponseDO;
         UserEntity userEntity = null;
         try {
             response = client.newCall(build).execute();
@@ -167,6 +169,8 @@ public class OaClientServiceImpl implements OaClientService {
                     userEntity.setDepartment(employee.getDept());
                     userEntity.setWorkNo(employee.getWorkNum());
                     userEntity.setFullName(employee.getName());
+                    userEntity.setPhone(employee.getCellPhone());
+                    userEntity.setSalerId(employee.getSalerId());
                 }
             }
         }

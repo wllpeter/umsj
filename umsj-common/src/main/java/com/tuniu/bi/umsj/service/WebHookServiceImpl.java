@@ -9,6 +9,7 @@ import io.micrometer.core.instrument.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,20 +22,15 @@ public class WebHookServiceImpl implements WebHookService {
 
     private Logger logger = LoggerFactory.getLogger(WebHookServiceImpl.class);
 
-    @Autowired
-    private DingTalkService dingTalkService;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private SmsService smsService;
-
     private List<String> biPlatform = Arrays.asList("bianyuqiu"
 //            ,"lujian2","wangjun9","haozhichao","weiliangliang","zhangwei21","zhangzheming"
     );
 
     private List<String> msgType = Arrays.asList("1", "2", "3");
+
+    @Autowired
+    @Qualifier("sendMessageMap")
+    private Map<Integer, MessageService> sendMessageMap;
 
     @Override
     public void sendMessage(AlertManagerRequestVO requestVO) throws AbstractException {
@@ -63,23 +59,25 @@ public class WebHookServiceImpl implements WebHookService {
             messageRequestVO.setContent(item.getAnnotations().getDescription());
             messageRequestVO.setNames(nameList);
             logger.info("发送消息体: RequestVO: {}", JSONObject.toJSONString(messageRequestVO));
+
             for (String str : sendTypes) {
+                MessageService messageService = sendMessageMap.get(Integer.valueOf(str));
                 switch (str) {
                     case "1":
                         messageRequestVO.setType(1);
-                        dingTalkService.sendMessage(messageRequestVO);
+                        messageService.sendMessage(messageRequestVO);
                         logger.info("发送钉钉成功");
                         System.out.println("发送钉钉成功");
                         break;
                     case "2":
                         messageRequestVO.setType(2);
-                        emailService.sendMessage(messageRequestVO);
+                        messageService.sendMessage(messageRequestVO);
                         logger.info("发送邮件成功");
                         System.out.println("发送邮件成功");
                         break;
                     case "3":
                         messageRequestVO.setType(3);
-                        smsService.sendMessage(messageRequestVO);
+                        messageService.sendMessage(messageRequestVO);
                         logger.info("发送短信成功");
                         System.out.println("发送短信成功");
                         break;
