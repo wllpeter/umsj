@@ -72,4 +72,14 @@ public class Symbol {
      * 问号
      */
     public static final String QUESTION_MARK = "?";
+
+    /**
+     * 1
+     */
+    public static final String TWO = "2";
+
+    /**
+     * 1
+     */
+    public static final String THREE = "3";
 }
