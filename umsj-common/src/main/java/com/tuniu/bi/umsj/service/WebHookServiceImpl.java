@@ -23,11 +23,23 @@ public class WebHookServiceImpl implements WebHookService {
 
     private Logger logger = LoggerFactory.getLogger(WebHookServiceImpl.class);
 
-    private List<String> biPlatform = Arrays.asList("bianyuqiu"
-            , "lujian2", "wangjun9", "haozhichao", "weiliangliang", "zhangwei21", "zhangzheming"
+    private List<String> biPlatform = Arrays.asList(
+            "bianyuqiu",
+            "lujian2",
+            "wangjun9",
+            "haozhichao",
+//            "weiliangliang",
+            "zhangwei21"
+//            "zhangzheming"
     );
 
-    private List<String> msgType = Arrays.asList("1", "2", "3");
+    private List<String> msgType = Arrays.asList(
+            //钉钉
+            "1",
+            //邮件
+            "2",
+            //短信
+            "3");
 
     @Autowired
     @Qualifier("sendMessageMap")
