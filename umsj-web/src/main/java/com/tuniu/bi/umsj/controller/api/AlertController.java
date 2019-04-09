@@ -4,8 +4,11 @@ import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.InvalidParamException;
 import com.tuniu.bi.umsj.service.MessageService;
+import com.tuniu.bi.umsj.service.WebHookService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
-import com.tuniu.bi.umsj.vo.*;
+import com.tuniu.bi.umsj.vo.AlertManagerRequestVO;
+import com.tuniu.bi.umsj.vo.MessageRequestVO;
+import com.tuniu.bi.umsj.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.CollectionUtils;
@@ -13,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import javax.validation.Valid;
-import com.tuniu.bi.umsj.service.WebHookService;
 
 import java.util.Map;
 
