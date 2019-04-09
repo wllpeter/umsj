@@ -1,6 +1,7 @@
 package com.tuniu.bi.umsj.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tuniu.bi.umsj.constant.Symbol;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.vo.AlertItem;
 import com.tuniu.bi.umsj.vo.AlertManagerRequestVO;
@@ -22,11 +23,23 @@ public class WebHookServiceImpl implements WebHookService {
 
     private Logger logger = LoggerFactory.getLogger(WebHookServiceImpl.class);
 
-    private List<String> biPlatform = Arrays.asList("bianyuqiu"
-//            ,"lujian2","wangjun9","haozhichao","weiliangliang","zhangwei21","zhangzheming"
+    private List<String> biPlatform = Arrays.asList(
+            "bianyuqiu",
+            "lujian2",
+            "wangjun9",
+            "haozhichao",
+//            "weiliangliang",
+            "zhangwei21"
+//            "zhangzheming"
     );
 
-    private List<String> msgType = Arrays.asList("1", "2", "3");
+    private List<String> msgType = Arrays.asList(
+            //钉钉
+            "1",
+            //邮件
+            "2",
+            //短信
+            "3");
 
     @Autowired
     @Qualifier("sendMessageMap")
@@ -50,8 +63,12 @@ public class WebHookServiceImpl implements WebHookService {
             }
             if (sendTypes.isEmpty()) {
                 //如果没有type,则默认发送邮件
-                sendTypes.add("2");
+                sendTypes.add(Symbol.TWO);
             }
+        }
+        if (sendTypes.contains(Symbol.ONE) || sendTypes.contains(Symbol.THREE)) {
+            nameList.remove("wangjun9");
+            nameList.remove("lujian2");
         }
         for (AlertItem item : alertItems) {
             MessageRequestVO messageRequestVO = new MessageRequestVO();
