@@ -1,4 +1,4 @@
-package com.tuniu.bi.umsj.utils;
+package com.tuniu.bi.umsj.config;
 
 import com.tuniu.bi.umsj.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author zhangwei21
  */
 @Component
-public class SendMessageUtils {
+public class SendMessageConfig {
 
     @Autowired
     @Qualifier("dingTalk")
