@@ -1,20 +1,16 @@
 package com.tuniu.bi.umsj.exception;
 
 import com.tuniu.bi.umsj.enums.ErrorCodeEnum;
-import com.tuniu.bi.umsj.executor.AsyncExecutorService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
 import com.tuniu.bi.umsj.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zhangwei21
@@ -25,10 +21,6 @@ public class GlobalExceptionHandler {
 
     private Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @Autowired
-    private AsyncExecutorService asyncExecutorService;
-
-
     /**
      * 分隔符
      */
@@ -36,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public Response exceptionHandler(Exception e, HttpServletRequest request) {
+    public Response exceptionHandler(Exception e) {
         Response response;
         String errorMsg;
         if (e instanceof MethodArgumentNotValidException) {

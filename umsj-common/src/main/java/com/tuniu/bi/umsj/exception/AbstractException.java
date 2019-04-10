@@ -5,7 +5,7 @@ package com.tuniu.bi.umsj.exception;
  *
  * @author zhangwei21
  */
-public abstract class AbstractException extends Exception {
+public abstract class AbstractException extends RuntimeException {
 
     private final int code;
 
