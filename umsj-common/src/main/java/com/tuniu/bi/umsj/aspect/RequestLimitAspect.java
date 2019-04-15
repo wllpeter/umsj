@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -50,10 +51,11 @@ public class RequestLimitAspect {
         ImmutableList keys = ImmutableList.of(key);
 
         String luaScript = buildLuaScript();
+
         RedisScript<Number> redisScript = new DefaultRedisScript<>(luaScript, Number.class);
-        Number count = (Number) redisTemplate.execute(redisScript, keys, limitCount, limitTime);
+        Number count = (Number) redisTemplate.execute(redisScript, keys, limitCount, limitTime/1000);
         if (null != count && count.intValue() > limitCount) {
-            throw new RequestLimitException(limitTime/60000 + "分钟内访问次数超过" + count + "次");
+            throw new RequestLimitException(limitTime/60000 + "分钟内访问次数超过" + limitCount + "次");
         }
     }
 
@@ -63,8 +65,8 @@ public class RequestLimitAspect {
      */
     private String buildLuaScript() {
         return "local c" +
-                "\nc = redis.call('get',KEYS[1])" +
-                "\nif c and tonumber(c) > tonumber(ARGV[1]) then" +
+                "\nc = tonumber(redis.call('get',KEYS[1]) or '0')" +
+                "\nif c > tonumber(ARGV[1]) then" +
                 "\nreturn c;" +
                 "\nend" +
                 "\nc = redis.call('incr',KEYS[1])" +
