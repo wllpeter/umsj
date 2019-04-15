@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 
@@ -45,11 +46,7 @@ public class AlertController {
      * @throws AbstractException
      */
     @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-    public Response sendMessage(@RequestBody MessageRequestVO messageRequestVO) throws AbstractException {
-        if (messageRequestVO == null || messageRequestVO.getType() == null || Strings.isNullOrEmpty(messageRequestVO.getContent())
-                || CollectionUtils.isEmpty(messageRequestVO.getNames())) {
-            throw new InvalidParamException();
-        }
+    public Response sendMessage(@RequestBody @Valid MessageRequestVO messageRequestVO) throws AbstractException {
         Integer type = messageRequestVO.getType();
         MessageService messageService = sendMessageMap.get(type);
         if (messageService == null) {

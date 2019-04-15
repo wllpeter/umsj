@@ -2,6 +2,7 @@ package com.tuniu.bi.umsj.vo;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class MessageRequestVO {
     /**
      * 发送的消息类型1:钉钉 2：邮件 3：短信
      */
+    @NotNull(message = "发送消息类型不能为空")
     private Integer type;
 
     private String title;
