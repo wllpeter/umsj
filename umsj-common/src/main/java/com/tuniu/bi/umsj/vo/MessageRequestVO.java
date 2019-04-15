@@ -1,5 +1,7 @@
 package com.tuniu.bi.umsj.vo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -7,6 +9,7 @@ import java.util.List;
  */
 public class MessageRequestVO {
 
+    @NotEmpty(message = "发送人员不能为空")
     private List<String> names;
 
     /**
@@ -16,6 +19,7 @@ public class MessageRequestVO {
 
     private String title;
 
+    @NotBlank(message = "发送内容不能为空")
     private String content;
 
     public List<String> getNames() {
