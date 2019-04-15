@@ -1,6 +1,5 @@
 package com.tuniu.bi.umsj.controller.api;
 
-import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.InvalidParamException;
 import com.tuniu.bi.umsj.service.MessageService;
@@ -11,7 +10,6 @@ import com.tuniu.bi.umsj.vo.MessageRequestVO;
 import com.tuniu.bi.umsj.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
