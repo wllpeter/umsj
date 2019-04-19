@@ -68,4 +68,15 @@ public class AlertController {
         return ResponseUtils.success();
     }
 
+    /**
+     * webHook
+     *
+     * @return
+     * @throws AbstractException
+     */
+    @RequestMapping(value = "/message", method = RequestMethod.GET)
+    public Response message() throws AbstractException {
+        return ResponseUtils.success("ping pong");
+    }
+
 }

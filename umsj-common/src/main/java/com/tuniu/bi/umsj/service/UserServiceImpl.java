@@ -57,13 +57,12 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             // 需要自动补充
             userEntity = oaClientService.getUser(username);
-
-        }
-        if (userEntity != null) {
-            // 则插入
-            // 设置默认的角色
-            userEntity.setRoleCodes(DEFAULT_ROLE_CODE);
-            userMapper.insert(userEntity);
+            if (userEntity != null) {
+                // 则插入
+                // 设置默认的角色
+                userEntity.setRoleCodes(DEFAULT_ROLE_CODE);
+                userMapper.insert(userEntity);
+            }
         }
         return userEntity;
     }

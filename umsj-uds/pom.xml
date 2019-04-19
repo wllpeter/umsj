@@ -13,5 +13,12 @@
     <artifactId>umsj-uds</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.tuniu.bi</groupId>
+            <artifactId>umsj-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 
 </project>
