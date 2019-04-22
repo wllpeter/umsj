@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 /**
  * @author zhangwei21
@@ -20,6 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static final String[] PERMIT_URL = {"/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/api/alert/**","/api/fix/**"};
 
+    @Autowired private RestAuthenticationEntryPoint authenticationEntryPoint;
+
     @Autowired
     private AuthenticationProvider customAuthenticationProvider;
 
@@ -30,11 +33,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().permitAll().
-                and().authorizeRequests()
-                .antMatchers(PERMIT_URL).permitAll().
-                and().authorizeRequests().antMatchers("/ping").hasAnyAuthority("SYS_ADMIN").
-                and().authorizeRequests().anyRequest().authenticated().
-                and().httpBasic().and().csrf().disable();
+        http.authorizeRequests().anyRequest().permitAll();
+//        http.formLogin().permitAll().
+//                and().authorizeRequests().antMatchers(PERMIT_URL).permitAll().
+//                //and().authorizeRequests().antMatchers("/ping").hasAnyAuthority("SYS_ADMIN").
+//                and().authorizeRequests().anyRequest().authenticated().
+//                and().httpBasic().
+//                and().csrf().disable();
     }
 }
