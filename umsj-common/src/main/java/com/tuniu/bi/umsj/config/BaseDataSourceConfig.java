@@ -23,7 +23,7 @@ import java.sql.SQLException;
  * @author zhangwei21
  */
 @Configuration
-@MapperScan(basePackages = {"com.tuniu.bi.umsj.mapper", "com.tuniu.bi.umsj.uds.mapper"}, sqlSessionFactoryRef = "baseSqlSessionFactory")
+@MapperScan(basePackages = {"com.tuniu.bi.umsj.mapper"}, sqlSessionFactoryRef = "baseSqlSessionFactory")
 public class BaseDataSourceConfig {
 
     /**
