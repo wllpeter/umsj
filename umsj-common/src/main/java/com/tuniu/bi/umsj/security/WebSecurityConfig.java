@@ -20,8 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static final String[] PERMIT_URL = {"/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/api/alert/**","/api/fix/**"};
 
-    @Autowired private RestAuthenticationEntryPoint authenticationEntryPoint;
-
     @Autowired
     private AuthenticationProvider customAuthenticationProvider;
 
