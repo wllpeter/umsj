@@ -27,7 +27,7 @@ public class UmsjWebApplication {
 
     @RequestLimit(count = 5)
     @RequestMapping("/api/ping")
-    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     public String ping() {
         // 获取jdk版本号
         String s = System.getProperty("java.version");
