@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -46,6 +47,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         try {
             oaClientService.checkOaAccount(username, password);
             userEntity = userService.init(username);
+            if (userEntity == null) {
+                throw new UsernameNotFoundException("用户名找不到用户!");
+            }
             // 查询角色
             String roleCodes = userEntity.getRoleCodes();
             if (!StringUtils.isEmpty(roleCodes)) {
