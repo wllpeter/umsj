@@ -1,7 +1,7 @@
 package com.tuniu.bi.umsj.controller.api;
 
 import com.tuniu.bi.umsj.exception.AbstractException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.exception.CommonException;
 import com.tuniu.bi.umsj.service.UserService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
 import com.tuniu.bi.umsj.vo.Response;
@@ -42,7 +42,7 @@ public class FixController {
     @RequestMapping(value = "/supplyUserInfo", method = RequestMethod.POST)
     public Response supplyUserInfo(@RequestBody List<String> usernames) throws AbstractException {
         if (CollectionUtils.isEmpty(usernames)) {
-            throw new InvalidParamException("参数错误");
+            throw new CommonException("参数错误");
         }
         userService.supplyUserInfo(usernames);
         return ResponseUtils.success();

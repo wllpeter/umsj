@@ -5,7 +5,6 @@ import com.tuniu.bi.umsj.entitydo.DingTalkRequestDO;
 import com.tuniu.bi.umsj.entitydo.DingTalkResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
 import com.tuniu.bi.umsj.mapper.UserMapper;
 import com.tuniu.bi.umsj.vo.DingTalkRequestVO;
 import com.tuniu.bi.umsj.vo.MessageRequestVO;
@@ -77,7 +76,7 @@ public class DingTalkServiceImpl implements MessageService {
         // 查询user表,查询salerId，phone
         List<Integer> salerIds = userService.obtainReceiver(messageRequestVO.getType(), messageRequestVO.getNames());
         if (CollectionUtils.isEmpty(salerIds)) {
-            throw new InvalidParamException("用户的saleId为空");
+            throw new CommonException("用户的saleId为空");
         }
         DingTalkRequestVO dingTalkRequestVO = new DingTalkRequestVO();
         dingTalkRequestVO.setMsgType(1);

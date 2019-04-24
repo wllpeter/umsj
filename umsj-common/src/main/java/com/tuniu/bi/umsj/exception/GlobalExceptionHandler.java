@@ -5,12 +5,16 @@ import com.tuniu.bi.umsj.utils.ResponseUtils;
 import com.tuniu.bi.umsj.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author zhangwei21
@@ -48,7 +52,7 @@ public class GlobalExceptionHandler {
         if (stringBuilder.length() > MSG_SEPERATOR.length()) {
             stringBuilder.delete(stringBuilder.length() - MSG_SEPERATOR.length(), stringBuilder.length());
         }
-        Response response = ResponseUtils.custom(false, ErrorCodeEnum.INVALID_PARAM_ERROR.getCode(), stringBuilder.toString());
+        Response response = ResponseUtils.custom(false, ErrorCodeEnum.BUSINESS_ERROR.getCode(), stringBuilder.toString());
         String errorMsg = "参数校验异常";
         LOGGER.error(errorMsg, e);
         return response;
@@ -60,6 +64,16 @@ public class GlobalExceptionHandler {
         Response response = ResponseUtils.custom(false, e.getCode(), e.getMessage());
         String errorMsg = "业务异常";
         LOGGER.error(errorMsg, e);
+        return response;
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseBody
+    public Response exceptionHandler(HttpServletResponse httpServletResponse, AccessDeniedException e) {
+        Response response = ResponseUtils.custom(false, HttpStatus.FORBIDDEN.value(), e.getMessage());
+        String errorMsg = "权限校验异常";
+        LOGGER.error(errorMsg, e);
+        httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
         return response;
     }
 }

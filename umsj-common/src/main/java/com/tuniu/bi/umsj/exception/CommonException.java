@@ -5,7 +5,7 @@ package com.tuniu.bi.umsj.exception;
  */
 public class CommonException extends AbstractException {
 
-    private static final int ERROR_CODE = 710007;
+    private static final int ERROR_CODE = 1;
 
     private static final String MSG = "逻辑处理异常";
 

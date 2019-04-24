@@ -10,16 +10,17 @@ public enum ErrorCodeEnum {
     /**
      * 操作成功返回码
      */
-    OK(710000, "OK"),
+    OK(0, "OK"),
     /**
      * 参数错误返回码
      */
-    INVALID_PARAM_ERROR(710003, "参数错误"),
+    BUSINESS_ERROR(1, "业务异常"),
 
     /**
      * 未知错误
      */
     UNKNOWN_CODE(-1, "未知错误");
+
 
     /**
      * code

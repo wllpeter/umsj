@@ -1,7 +1,7 @@
 package com.tuniu.bi.umsj.controller.api;
 
 import com.tuniu.bi.umsj.exception.AbstractException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.exception.CommonException;
 import com.tuniu.bi.umsj.service.MessageService;
 import com.tuniu.bi.umsj.service.WebHookService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
@@ -48,7 +48,7 @@ public class AlertController {
         Integer type = messageRequestVO.getType();
         MessageService messageService = sendMessageMap.get(type);
         if (messageService == null) {
-            throw new InvalidParamException("暂不支持的发消息类型");
+            throw new CommonException("暂不支持的发消息类型");
         }
         messageService.sendMessage(messageRequestVO);
 

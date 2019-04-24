@@ -2,7 +2,7 @@ package com.tuniu.bi.umsj.controller.api;
 
 import com.tuniu.bi.umsj.annotation.RequestData;
 import com.tuniu.bi.umsj.exception.AbstractException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.exception.CommonException;
 import com.tuniu.bi.umsj.service.UdsPublishService;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
 import com.tuniu.bi.umsj.vo.*;
@@ -68,7 +68,7 @@ public class UdsController {
      */
     public Response updatePublishStatus(@RequestData UdsPublishVO udsPublishVO) throws AbstractException {
         if (udsPublishVO == null || udsPublishVO.getId() == null || udsPublishVO.getStatus() == null) {
-            throw new InvalidParamException("参数错误");
+            throw new CommonException("参数错误");
         }
         udsPublishService.updatePublishStatus(udsPublishVO);
         return ResponseUtils.success();

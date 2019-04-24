@@ -4,6 +4,7 @@ import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.mapper.entity.UserEntity;
 import com.tuniu.bi.umsj.service.OaClientService;
 import com.tuniu.bi.umsj.service.UserService;
+import com.tuniu.bi.umsj.utils.JwtUtils;
 import com.tuniu.bi.umsj.utils.ResponseUtils;
 import com.tuniu.bi.umsj.vo.Response;
 import com.tuniu.bi.umsj.vo.User;
@@ -41,13 +42,17 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Response<UserEntity> login(@RequestBody @Valid User user) throws AbstractException {
+    public Response< Map<String, String>> login(@RequestBody @Valid User user) throws AbstractException {
         String username = user.getUsername();
         String password = user.getPassword();
         // ldap 认证
         oaClientService.checkOaAccount(username, password);
         // 自动创建账户信息
         UserEntity userEntity = userService.init(username);
-        return ResponseUtils.success(userEntity);
+        // 返回token
+        String token = JwtUtils.generateToken(username);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        return ResponseUtils.success(map);
     }
 }

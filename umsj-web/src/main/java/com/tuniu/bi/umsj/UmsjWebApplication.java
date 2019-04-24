@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ public class UmsjWebApplication {
 
     @RequestLimit(count = 5)
     @RequestMapping("/api/ping")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMINS')")
     public String ping() {
         // 获取jdk版本号
         String s = System.getProperty("java.version");
@@ -34,7 +36,7 @@ public class UmsjWebApplication {
 
     }
 
-    @Bean
+    //@Bean
     public FilterRegistrationBean jwtFilter() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter();

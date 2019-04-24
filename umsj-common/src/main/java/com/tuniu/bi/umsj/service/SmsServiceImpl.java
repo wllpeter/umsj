@@ -5,7 +5,6 @@ import com.tuniu.bi.umsj.entitydo.SmsRequestDO;
 import com.tuniu.bi.umsj.entitydo.SmsResponseDO;
 import com.tuniu.bi.umsj.exception.AbstractException;
 import com.tuniu.bi.umsj.exception.CommonException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
 import com.tuniu.bi.umsj.vo.MessageRequestVO;
 import com.tuniu.bi.umsj.vo.SmsRequestVO;
 import okhttp3.*;
@@ -90,10 +89,10 @@ public class SmsServiceImpl implements  MessageService {
         // 查询user表,查询salerId，phone
         List<String> phones = userService.obtainReceiver(messageRequestVO.getType(), messageRequestVO.getNames());
         if (CollectionUtils.isEmpty(phones)) {
-            throw new InvalidParamException("用户的手机号码为空");
+            throw new CommonException("用户的手机号码为空");
         }
         if (messageRequestVO.getContent().length() > 350) {
-            throw new InvalidParamException("发送短信的内容太长");
+            throw new CommonException("发送短信的内容太长");
         }
         SmsRequestVO smsRequestVO = new SmsRequestVO();
         smsRequestVO.setContent(messageRequestVO.getContent());

@@ -1,7 +1,7 @@
 package com.tuniu.bi.umsj.service;
 
 import com.tuniu.bi.umsj.exception.AbstractException;
-import com.tuniu.bi.umsj.exception.InvalidParamException;
+import com.tuniu.bi.umsj.exception.CommonException;
 import com.tuniu.bi.umsj.mapper.UserMapper;
 import com.tuniu.bi.umsj.vo.EmailRequestVO;
 import com.tuniu.bi.umsj.vo.MessageRequestVO;
@@ -53,7 +53,7 @@ public class EmailServiceImpl implements MessageService {
         // 查询user表,查询salerId，phone
         List<String> emails = userService.obtainReceiver(messageRequestVO.getType(), messageRequestVO.getNames());
         if (CollectionUtils.isEmpty(emails)) {
-            throw new InvalidParamException("用户的email为空");
+            throw new CommonException("用户的email为空");
         }
         EmailRequestVO emailRequestVO = new EmailRequestVO();
         emailRequestVO.setEmails(emails);
