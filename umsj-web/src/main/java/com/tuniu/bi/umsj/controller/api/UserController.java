@@ -20,6 +20,9 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author zhangwei21
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -37,11 +40,11 @@ public class UserController {
     }
 
     /**
-     * 登录
-     *
-     * @return
+     * 登录（先注释，目前已经在拦截器中拦截）
+     * @param user
+     * @return Response<Map<String, String>>
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    //@RequestMapping(value = "/login", method = RequestMethod.POST)
     public Response< Map<String, String>> login(@RequestBody @Valid User user) throws AbstractException {
         String username = user.getUsername();
         String password = user.getPassword();
@@ -51,7 +54,7 @@ public class UserController {
         UserEntity userEntity = userService.init(username);
         // 返回token
         String token = JwtUtils.generateToken(username);
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(16);
         map.put("token", token);
         return ResponseUtils.success(map);
     }
