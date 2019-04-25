@@ -1,6 +1,6 @@
 package com.tuniu.bi.umsj.base.dao.mapper;
 
-import com.tuniu.bi.umsj.base.annotation.UmsjMapper;
+import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * 用户数据库操作类
  * @author zhangwei21
  */
-@UmsjMapper
+@UmsMapper
 public interface UserMapper {
 
     /**

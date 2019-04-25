@@ -1,6 +1,6 @@
 package com.tuniu.bi.umsj.base.config;
 
-import com.tuniu.bi.umsj.base.annotation.UmsjMapper;
+import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -24,17 +24,17 @@ import java.sql.SQLException;
  * @author zhangwei21
  */
 @Configuration
-@MapperScan(basePackages = {"com.tuniu.bi.umsj"}, sqlSessionFactoryRef = "baseSqlSessionFactory", annotationClass = UmsjMapper.class)
-public class BaseDataSourceConfig {
+@MapperScan(basePackages = {"com.tuniu.bi.umsj"}, sqlSessionFactoryRef = "umsSqlSessionFactory", annotationClass = UmsMapper.class)
+public class UmsDataSourceConfig {
 
     /**
      * 创建数据源
      *
      * @return
      */
-    @Bean(name = "baseDataSource")
+    @Bean(name = "umsDataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.base")
+    @ConfigurationProperties(prefix = "spring.datasource.ums")
     public DataSource getDateSource() {
         return DataSourceBuilder.create().build();
     }
@@ -46,9 +46,9 @@ public class BaseDataSourceConfig {
      * @return
      * @throws SQLException
      */
-    @Bean("baseTransactionManager")
+    @Bean("umsTransactionManager")
     @Primary
-    public DataSourceTransactionManager baseTransactionManager(@Qualifier("baseDataSource") DataSource dataSource) throws SQLException {
+    public DataSourceTransactionManager umsTransactionManager(@Qualifier("umsDataSource") DataSource dataSource) throws SQLException {
         return new DataSourceTransactionManager(dataSource);
     }
     /**
@@ -58,9 +58,9 @@ public class BaseDataSourceConfig {
      * @return
      * @throws Exception
      */
-    @Bean(name = "baseSqlSessionFactory")
+    @Bean(name = "umsSqlSessionFactory")
     @Primary
-    public SqlSessionFactory baseSqlSessionFactory(@Qualifier("baseDataSource") DataSource dataSource)
+    public SqlSessionFactory umsSqlSessionFactory(@Qualifier("umsDataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
@@ -74,10 +74,10 @@ public class BaseDataSourceConfig {
      * @param sessionFactory
      * @return
      */
-    @Bean("baseSqlSessionTemplate")
+    @Bean("umsSqlSessionTemplate")
     @Primary
-    public SqlSessionTemplate baseSqlSessionTemplate(
-            @Qualifier("baseSqlSessionFactory") SqlSessionFactory sessionFactory) {
+    public SqlSessionTemplate umsSqlSessionTemplate(
+            @Qualifier("umsSqlSessionFactory") SqlSessionFactory sessionFactory) {
         return new SqlSessionTemplate(sessionFactory);
     }
 
