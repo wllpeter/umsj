@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuniu.bi.umsj.base.dao.mapper.RolesMapper">
+    <resultMap id="BaseResultMap" type="com.tuniu.bi.umsj.base.dao.entity.RolesEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="menus" jdbcType="VARCHAR" property="menus"/>
+        <result column="submenus" jdbcType="VARCHAR" property="submenus"/>
+        <result column="actions" jdbcType="VARCHAR" property="actions"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, code, name, menus, submenus, actions, created_at, updated_at
+    </sql>
+    <select id="findMany" parameterType="com.tuniu.bi.umsj.base.dao.entity.RolesParamEntity" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles
+        <where>
+            <if test="codes != null and codes.size > 0">
+                AND code in
+                <foreach item="tmpCode" index="index"
+                         collection="codes" open="("
+                         separator="," close=")">
+                    #{tmpCode}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

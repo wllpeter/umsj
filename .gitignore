@@ -36,3 +36,4 @@ client
 *.log
 *.log.*.gz
 *.log.*.tmp
+front

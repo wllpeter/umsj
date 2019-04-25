@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuniu.bi.umsj.base.dao.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.tuniu.bi.umsj.base.dao.entity.UserEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="job_title" jdbcType="VARCHAR" property="jobTitle"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="work_no" jdbcType="VARCHAR" property="workNo"/>
+        <result column="role_codes" jdbcType="VARCHAR" property="roleCodes"/>
+        <result column="saler_id" jdbcType="INTEGER" property="salerId"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id, username, password, full_name, job_title, department, work_no, role_codes,saler_id, phone, created_at, updated_at
+    </sql>
+    <select id="findByPk" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insert" parameterType="com.tuniu.bi.umsj.base.dao.entity.UserEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="fullName != null">
+                full_name,
+            </if>
+            <if test="jobTitle != null">
+                job_title,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="workNo != null">
+                work_no,
+            </if>
+            <if test="roleCodes != null">
+                role_codes,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="fullName != null">
+                #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="jobTitle != null">
+                #{jobTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="workNo != null">
+                #{workNo,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCodes != null">
+                #{roleCodes,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.tuniu.bi.umsj.base.dao.entity.UserEntity">
+        UPDATE user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="fullName != null">
+                full_name = #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="jobTitle != null">
+                job_title = #{jobTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                department = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="workNo != null">
+                work_no = #{workNo,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCodes != null">
+                role_codes = #{roleCodes,jdbcType=VARCHAR},
+            </if>
+            <if test="salerId != null">
+                saler_id = #{salerId,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        ORDER BY id DESC
+    </select>
+</mapper>
