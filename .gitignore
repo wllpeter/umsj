@@ -37,3 +37,5 @@ client
 *.log.*.gz
 *.log.*.tmp
 front
+
+a.java
