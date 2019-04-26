@@ -9,11 +9,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * cluster数据库
+ * flashCm数据库
  */
 @Documented
 @Inherited
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
-public @interface ClusterMapper {
+public @interface FlushCmMapper {
 }

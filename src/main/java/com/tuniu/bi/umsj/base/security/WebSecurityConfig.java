@@ -21,13 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author zhangwei21
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 后期做成配置的，放到数据库中
      */
-    private static final String[] PERMIT_URL = {"/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/api/alert/**","/api/fix/**"};
+    private static final String[] PERMIT_URL = {"/v2/api-docs", "/configuration/ui", "/swagger-resources", "/**/configuration/security", "/swagger-ui.html", "/webjars/**",
+            "/swagger-resources/configuration/ui","/swagge‌​r-ui.html", "/api/alert/**", "/api/fix/**","/api/ping"};
 
     @Autowired
     private AuthenticationProvider customAuthenticationProvider;
@@ -47,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter(userService, rolesMapper);
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(customAuthenticationProvider);
@@ -56,9 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-                and().authorizeRequests().antMatchers("/api/user/login", "/api/fix/**", "/api/alert/**", "/api/ping").permitAll().anyRequest().authenticated()
-        .and().addFilterBefore(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class).
-         addFilterBefore(jwtAuthenticationTokenFilter(), JwtLoginFilter.class)
-        .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                and().authorizeRequests().antMatchers(PERMIT_URL).permitAll().anyRequest().authenticated()
+                .and().addFilterBefore(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class).
+                addFilterBefore(jwtAuthenticationTokenFilter(), JwtLoginFilter.class)
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
 }

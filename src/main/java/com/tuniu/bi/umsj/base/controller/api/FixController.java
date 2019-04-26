@@ -9,12 +9,8 @@ import com.tuniu.bi.umsj.base.vo.Response;
 import com.tuniu.bi.umsj.uds.dao.entity.InfoEntity;
 import com.tuniu.bi.umsj.uds.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,7 +56,7 @@ public class FixController {
      * @return
      */
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
-    public Response getInfo(@Param("id") Integer id) throws AbstractException {
+    public Response getInfo(@RequestParam("id") Integer id) throws AbstractException {
         InfoEntity byPk = infoService.findByPk(id);
         return ResponseUtils.success(byPk);
     }
@@ -70,7 +66,7 @@ public class FixController {
      * @return
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public Response getUser(@Param("id") Integer id) throws AbstractException {
+    public Response getUser(@RequestParam("id") Integer id) throws AbstractException {
         UserEntity byId = userService.findById(id);
         return ResponseUtils.success(byId);
     }

@@ -2,6 +2,8 @@ package com.tuniu.bi.umsj.base.service;
 
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
+import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
+import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
 
 import java.util.List;
 
@@ -27,6 +29,15 @@ public interface UserService {
      */
     UserEntity init(String username) throws AbstractException;
 
+    /**
+     * 初始化用户
+     * @param username
+     * @param roleCodes
+     * @throws AbstractException
+     * @return UserEntity
+     */
+    UserEntity init(String username, String roleCodes) throws AbstractException;
+
 
     /**
      * 获取接收者信息
@@ -47,4 +58,12 @@ public interface UserService {
      * @throws AbstractException
      */
     void supplyUserInfo(List<String> usernames) throws AbstractException;
+
+
+    /**
+     * 分页查找多个用户
+     * @param requestVO
+     * @throws AbstractException
+     */
+    UserListResponseVO findMany(UserListRequestVO requestVO) throws AbstractException;
 }

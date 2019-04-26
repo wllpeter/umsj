@@ -1,6 +1,6 @@
 package com.tuniu.bi.umsj.base.dao.mapper;
 
-import com.tuniu.bi.umsj.base.annotation.UmsjMapper;
+import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import com.tuniu.bi.umsj.base.dao.entity.ExceptionLogEntity;
 
 /**
@@ -8,7 +8,7 @@ import com.tuniu.bi.umsj.base.dao.entity.ExceptionLogEntity;
  *
  * @author zhangwei21
  */
-@UmsjMapper
+@UmsMapper
 public interface ExceptionLogMapper {
 
     /**

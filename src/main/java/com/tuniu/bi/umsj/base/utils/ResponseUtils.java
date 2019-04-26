@@ -22,6 +22,25 @@ public class ResponseUtils {
     /**
      * 成功请求
      *
+     * @param msg
+     * @return
+     */
+    public static <T> Response<T> success(String msg) {
+        return new Response(true, ErrorCodeEnum.OK.getCode(), msg);
+    }
+
+    /**
+     * 成功请求
+     *
+     * @param msg
+     * @return
+     */
+    public static <T> Response<T> success(String msg, T data) {
+        return new Response(true, ErrorCodeEnum.OK.getCode(), msg, data);
+    }
+    /**
+     * 成功请求
+     *
      * @param data
      * @return
      */

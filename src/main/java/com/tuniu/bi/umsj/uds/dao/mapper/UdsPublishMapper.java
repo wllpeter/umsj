@@ -1,6 +1,6 @@
 package com.tuniu.bi.umsj.uds.dao.mapper;
 
-import com.tuniu.bi.umsj.base.annotation.UmsjMapper;
+import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishEntity;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishParamEntity;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author zhangwei21
  */
-@UmsjMapper
+@UmsMapper
 public interface UdsPublishMapper {
 
     /**

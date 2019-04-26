@@ -6,12 +6,12 @@ import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.vo.AlertItem;
 import com.tuniu.bi.umsj.base.vo.AlertManagerRequestVO;
 import com.tuniu.bi.umsj.base.vo.MessageRequestVO;
-import io.micrometer.core.instrument.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -53,7 +53,7 @@ public class WebHookServiceImpl implements WebHookService {
         //判断alertName包含发送消息类型
         Set<String> sendTypes = new HashSet<>();
         String alertName = requestVO.getGroupLabels().getAlertname();
-        if (StringUtils.isNotBlank(alertName)) {
+        if (!StringUtils.isEmpty(alertName)) {
             char[] typeArr = alertName.toCharArray();
             for (char cha : typeArr) {
                 String chaStr = String.valueOf(cha);
