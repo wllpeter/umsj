@@ -126,4 +126,14 @@
         FROM user
         ORDER BY id DESC
     </select>
+
+    <select id="findMany" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        <where>
+            <if test="username != null and username != ''">AND username like LIKE CONCAT('%',#{username},'%')</if>
+        </where>
+        ORDER BY id DESC
+    </select>
 </mapper>

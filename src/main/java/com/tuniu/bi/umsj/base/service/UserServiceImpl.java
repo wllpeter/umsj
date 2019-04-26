@@ -1,6 +1,7 @@
 package com.tuniu.bi.umsj.base.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.base.dao.entity.OaUserEntity;
 import com.tuniu.bi.umsj.base.dao.entity.OaUserParamEntity;
@@ -8,6 +9,9 @@ import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.dao.mapper.OaUserMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
+import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
+import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity init(String username) throws AbstractException {
+        return init(username, null);
+    }
+
+    @Override
+    public UserEntity init(String username, String roleCodes) throws AbstractException {
         // 先查询用户是否在user表中存在
         UserEntity userEntity = userMapper.findByUsername(username);
         if (userEntity == null) {
@@ -60,7 +69,7 @@ public class UserServiceImpl implements UserService {
             if (userEntity != null) {
                 // 则插入
                 // 设置默认的角色
-                userEntity.setRoleCodes(DEFAULT_ROLE_CODE);
+                userEntity.setRoleCodes(StringUtils.isBlank(roleCodes) ? DEFAULT_ROLE_CODE : roleCodes);
                 userMapper.insert(userEntity);
             }
         }
@@ -101,7 +110,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void syncOaUserInfo() {
         int page = 1;
-        PageHelper.startPage(page, 5);
+        PageHelper.startPage(page, 20);
         List<UserEntity> all = userMapper.findAll();
         OaUserParamEntity oaUserParamEntity = new OaUserParamEntity();
         // 查询在职
@@ -138,5 +147,26 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
+    }
+
+    @Override
+    public UserListResponseVO findMany(UserListRequestVO requestVO) throws AbstractException {
+        UserListResponseVO userListResponseVO = new UserListResponseVO();
+        Integer page = requestVO.getPageNum();
+        if (page == null) {
+            page = 1;
+        }
+        Integer pageSize = requestVO.getPageSize();
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        PageHelper.startPage(page, pageSize);
+        List<UserEntity> many = userMapper.findMany(requestVO.getUsername());
+        PageInfo<UserEntity> pageInfo = new PageInfo<>(many, pageSize);
+        userListResponseVO.setPageNum(pageInfo.getPageNum());
+        userListResponseVO.setPageSize(pageInfo.getPageSize());
+        userListResponseVO.setTotal(pageInfo.getTotal());
+        userListResponseVO.setUserList(many);
+        return userListResponseVO;
     }
 }

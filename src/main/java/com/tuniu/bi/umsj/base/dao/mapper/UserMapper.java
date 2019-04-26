@@ -47,4 +47,10 @@ public interface UserMapper {
      * @return
      */
     List<UserEntity> findAll();
+
+    /**
+     * 根据名称查找
+     * @return
+     */
+    List<UserEntity> findMany(@Param("username") String username);
 }
