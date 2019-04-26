@@ -11,7 +11,6 @@ public class UserEntity {
 
     private Integer id;
 
-    @NotBlank(message = "用户名不能为空")
     private String username;
 
     private String password;
@@ -24,7 +23,6 @@ public class UserEntity {
 
     private String workNo;
 
-    @NotBlank(message = "用户角色信息不能为空")
     private String roleCodes;
 
     private Integer salerId;

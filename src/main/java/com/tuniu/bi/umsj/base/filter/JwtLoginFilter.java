@@ -1,9 +1,12 @@
 package com.tuniu.bi.umsj.base.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
 import com.tuniu.bi.umsj.base.vo.Response;
+import com.tuniu.bi.umsj.base.vo.User;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -18,6 +21,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,13 +38,27 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         if (!request.getMethod().equals("POST")) {
+
+        }
+        // 获取json格式中的数据，不是form表单提交，
+        StringBuilder strbuf = new StringBuilder();
+        String line;
+        BufferedReader br = request.getReader();
+        while ((line = br.readLine()) != null) {
+            strbuf.append(line);
+        }
+        String str = strbuf.toString();
+        if (StringUtils.isEmpty(str)) {
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        username = username.trim();
-        password = password.trim();
+        User user = JSONObject.parseObject(str, User.class);
+        if (user == null) {
+            throw new AuthenticationServiceException(
+                    "Authentication method not supported: " + request.getMethod());
+        }
+        String username = user.getUsername();
+        String password = user.getPassword();
         if (checkUsernameAndPassword(username, password)) {
             throw new AuthenticationServiceException(
                     "Authentication parameter username or password is blank");

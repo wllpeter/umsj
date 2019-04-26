@@ -11,12 +11,12 @@ import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
-import io.micrometer.core.instrument.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
             if (userEntity != null) {
                 // 则插入
                 // 设置默认的角色
-                userEntity.setRoleCodes(StringUtils.isBlank(roleCodes) ? DEFAULT_ROLE_CODE : roleCodes);
+                userEntity.setRoleCodes(StringUtils.isEmpty(roleCodes) ? DEFAULT_ROLE_CODE : roleCodes);
                 userMapper.insert(userEntity);
             }
         }
@@ -166,6 +166,7 @@ public class UserServiceImpl implements UserService {
         userListResponseVO.setPageNum(pageInfo.getPageNum());
         userListResponseVO.setPageSize(pageInfo.getPageSize());
         userListResponseVO.setTotal(pageInfo.getTotal());
+        userListResponseVO.setPages(pageInfo.getPages());
         userListResponseVO.setUserList(many);
         return userListResponseVO;
     }
