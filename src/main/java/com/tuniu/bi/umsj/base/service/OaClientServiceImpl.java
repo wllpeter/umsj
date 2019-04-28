@@ -110,11 +110,9 @@ public class OaClientServiceImpl implements OaClientService {
                 throw new CommonException("认证异常!");
             }
         } catch (javax.naming.AuthenticationException e) {
-            LOGGER.error("用户[" + username + "]认证失败!" + e.getMessage());
-            throw new CommonException("认证失败!账户名或密码错误!");
+            throw new CommonException("认证失败!账户名或密码错误!", e);
         } catch (Exception e) {
-            LOGGER.error("用户[" + username + "]认证出错!" + e.getMessage());
-            throw new CommonException("认证出错!系统异常!");
+            throw new CommonException("认证出错!系统异常!", e);
         }
     }
 
@@ -153,7 +151,6 @@ public class OaClientServiceImpl implements OaClientService {
             byte[] bytes1 = Base64.decodeBase64(response.body().bytes());
             ucQuerySalesResponseDO = JSONObject.parseObject(bytes1, UcQuerySalesResponseDO.class);
         } catch (IOException e) {
-            LOGGER.error("访问oa接口异常", e);
             throw new CommonException("访问oa接口异常", e);
         }
         if (!ucQuerySalesResponseDO.getSuccess()) {

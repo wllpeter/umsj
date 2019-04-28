@@ -38,14 +38,10 @@ public class JwtUtils {
      * @param token
      */
     public static void validateToken(String token) {
-        try {
-            Jwts.parser()
-                    .setSigningKey(SecurityConfigConst.key)
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody();
-        } catch (Exception e) {
-            throw new CommonException("Invalid Token. " + e.getMessage());
-        }
+        Jwts.parser()
+                .setSigningKey(SecurityConfigConst.key)
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody();
     }
 
     /**

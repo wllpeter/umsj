@@ -79,7 +79,6 @@ public class SmsServiceImpl implements  MessageService {
                 throw new CommonException("发送SMS消息失败");
             }
         } catch (IOException e) {
-            LOGGER.error("发送SMS消息错误", e);
             throw new CommonException("发送SMS消息错误", e);
         }
     }

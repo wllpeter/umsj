@@ -66,7 +66,6 @@ public class DingTalkServiceImpl implements MessageService {
                 throw new CommonException("发送钉钉消息，返回失败");
             }
         } catch (IOException e) {
-            LOGGER.error("发送钉钉消息错误", e);
             throw new CommonException("发送钉钉消息错误", e);
         }
     }
