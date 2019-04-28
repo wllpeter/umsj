@@ -1,7 +1,6 @@
 package com.tuniu.bi.umsj.base.utils;
 
 import com.tuniu.bi.umsj.base.constant.SecurityConfigConst;
-import com.tuniu.bi.umsj.base.exception.CommonException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -51,15 +50,11 @@ public class JwtUtils {
      */
     public static String getUsername(String token) {
         String username = "";
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(SecurityConfigConst.key)
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody();
-            username = (String) claims.get("username");
-        } catch (Exception e) {
-            throw new CommonException("Invalid Token. " + e.getMessage());
-        }
+        Claims claims = Jwts.parser()
+                .setSigningKey(SecurityConfigConst.key)
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody();
+        username = (String) claims.get("username");
         return username;
     }
 
@@ -70,14 +65,10 @@ public class JwtUtils {
      * @param token
      */
     public static boolean checkToken(String token) {
-        try {
-            Jwts.parser()
-                    .setSigningKey(SecurityConfigConst.key)
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody();
-            return true;
-        } catch (Exception e) {
-            throw new CommonException("Invalid Token. " + e.getMessage());
-        }
+        Jwts.parser()
+                .setSigningKey(SecurityConfigConst.key)
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody();
+        return true;
     }
 }
