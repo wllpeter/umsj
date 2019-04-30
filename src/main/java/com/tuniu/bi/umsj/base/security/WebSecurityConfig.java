@@ -27,8 +27,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 后期做成配置的，放到数据库中
      */
-    private static final String[] PERMIT_URL = {"/v2/api-docs", "/configuration/ui", "/swagger-resources", "/**/configuration/security", "/swagger-ui.html", "/webjars/**",
-            "/swagger-resources/configuration/ui","/swagge‌​r-ui.html", "/api/alert/**", "/api/fix/**","/api/ping"};
+    private static final String[] PERMIT_URL = {
+            "/",
+            "/**/*.js",
+            "/**/*.jpg",
+            "/**/*.png",
+            "/**/*.gif",
+            "/**/*.css",
+            "/**/*.woff",
+            "/**/*.ttf",
+            "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources",
+            "/**/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger-resources/configuration/ui",
+            "/swagge‌​r-ui.html",
+            "/api/alert/**",
+            "/api/fix/**",
+            "/api/ping"
+    };
 
     @Autowired
     private AuthenticationProvider customAuthenticationProvider;
