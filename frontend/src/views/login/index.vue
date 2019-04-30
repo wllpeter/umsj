@@ -3,10 +3,8 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">
-          {{ $t('login.title') }}
-        </h3>
-        <lang-select class="set-language" />
+        <h3 class="title">途牛大数据平台</h3>
+<!--        <lang-select class="set-language" />-->
       </div>
 
       <el-form-item prop="username">
@@ -52,19 +50,18 @@
 
       <div style="position:relative">
         <div class="tips">
-          <span>{{ $t('login.username') }} : admin</span>
-          <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
+          <span><b>提示：</b> 使用域账号登录。</span>
         </div>
-        <div class="tips">
-          <span style="margin-right:18px;">
-            {{ $t('login.username') }} : editor
-          </span>
-          <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
-        </div>
+<!--        <div class="tips">-->
+<!--          <span style="margin-right:18px;">-->
+<!--            {{ $t('login.username') }} : editor-->
+<!--          </span>-->
+<!--          <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
+<!--        </div>-->
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          {{ $t('login.thirdparty') }}
-        </el-button>
+<!--        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
+<!--          {{ $t('login.thirdparty') }}-->
+<!--        </el-button>-->
       </div>
     </el-form>
 
@@ -89,25 +86,25 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入正确的用户名'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码至少 6 位'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur'}],
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
