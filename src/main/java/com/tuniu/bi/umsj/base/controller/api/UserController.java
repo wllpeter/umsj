@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,13 +109,21 @@ public class UserController {
 
     @ApiOperation(value = "用户信息", notes = "用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public Response getInfo(HttpServletRequest request){
+    public Response<UserInfoResponseVO> getInfo(HttpServletRequest request){
         String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)) {
             throw new CommonException("token参数为空");
         }
         String username = JwtUtils.getUsername(token);
         UserEntity init = userService.init(username);
-        return ResponseUtils.success(init);
+        UserInfoResponseVO responseVO = new UserInfoResponseVO();
+        responseVO.setFullName(init.getFullName());
+        if (StringUtils.isEmpty(init.getRoleCodes())) {
+            responseVO.setRoles(Collections.emptyList());
+        } else {
+            responseVO.setRoles(new ArrayList<>(StringUtils.commaDelimitedListToSet(init.getRoleCodes())));
+        }
+        responseVO.setUsername(init.getUsername());
+        return ResponseUtils.success(responseVO);
     }
 }
