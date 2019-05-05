@@ -2,6 +2,7 @@ package com.tuniu.bi.umsj.base.controller.api;
 
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
+import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.OaClientService;
 import com.tuniu.bi.umsj.base.service.UserService;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
@@ -13,8 +14,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,4 +105,15 @@ public class UserController {
         return ResponseUtils.success("用户创建成功");
     }
 
+    @ApiOperation(value = "用户信息", notes = "用户信息")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public Response getInfo(HttpServletRequest request){
+        String token = request.getHeader("token");
+        if (StringUtils.isEmpty(token)) {
+            throw new CommonException("token参数为空");
+        }
+        String username = JwtUtils.getUsername(token);
+        UserEntity init = userService.init(username);
+        return ResponseUtils.success(init);
+    }
 }
