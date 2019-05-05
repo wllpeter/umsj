@@ -64,4 +64,12 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         super.configureMessageConverters(converters);
         converters.add(responseBodyConverter());
     }
+
+//    @Override
+//    protected void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedMethods("*")
+//                .allowedOrigins("*")
+//                .allowedHeaders("*");
+//    }
 }

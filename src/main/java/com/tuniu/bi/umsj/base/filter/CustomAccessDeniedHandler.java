@@ -20,6 +20,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         Response<Object> custom = ResponseUtils.custom(false, HttpStatus.FORBIDDEN.value(), accessDeniedException.getMessage());
         response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", request.getHeader("Content-Type"));
         response.getWriter().write(JSONObject.toJSONString(custom));
     }
 }

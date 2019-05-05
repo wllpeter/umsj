@@ -86,6 +86,8 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         Response<Map<String, String>> error = ResponseUtils.custom(false, HttpStatus.UNAUTHORIZED.value(), failed.getMessage());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", request.getHeader("Content-Type"));
         response.getWriter().write(JSONObject.toJSONString(error));
     }
 }

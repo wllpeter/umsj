@@ -18,6 +18,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Response<Object> custom = ResponseUtils.custom(false, HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", request.getHeader("Content-Type"));
         response.getWriter().write(JSONObject.toJSONString(custom));
     }
 }
