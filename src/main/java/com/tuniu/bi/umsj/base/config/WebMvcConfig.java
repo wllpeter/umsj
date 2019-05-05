@@ -45,13 +45,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         return corsConfiguration;
     }
 
-//    @Override
-//    protected void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
-//    }
-
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

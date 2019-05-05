@@ -30,7 +30,7 @@ public class UmsjWebApplication {
         // 获取jdk版本号
         String s = System.getProperty("java.version");
         String active = System.getProperty("spring.profiles.active");
-        return "pong! " + s + "|" + active;
+        return "你好pong! " + s + "|" + active;
 
     }
 

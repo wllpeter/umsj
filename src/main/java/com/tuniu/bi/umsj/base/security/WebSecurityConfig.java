@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagge‌​r-ui.html",
             "/api/alert/**",
             "/api/fix/**",
-            "/api/ping"
+            "/api/ping",
+            "/*.ico"
     };
 
     @Autowired
