@@ -10,7 +10,7 @@ export function login(data) {
 
 export function getInfo() {
   return request({
-    url: '/user/info',
+    url: '/api/user/info',
     method: 'get',
     params: {}
   })
@@ -18,7 +18,7 @@ export function getInfo() {
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/api/user/logout',
     method: 'post'
   })
 }
