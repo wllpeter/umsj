@@ -12,6 +12,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -116,14 +119,15 @@ public class UserController {
         }
         String username = JwtUtils.getUsername(token);
         UserEntity init = userService.init(username);
-        UserInfoResponseVO responseVO = new UserInfoResponseVO();
-        responseVO.setFullName(init.getFullName());
+
+        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+        MapperFacade mapper = mapperFactory.getMapperFacade();
+        UserInfoResponseVO responseVO = mapper.map(init, UserInfoResponseVO.class);
         if (StringUtils.isEmpty(init.getRoleCodes())) {
             responseVO.setRoles(Collections.emptyList());
         } else {
             responseVO.setRoles(new ArrayList<>(StringUtils.commaDelimitedListToSet(init.getRoleCodes())));
         }
-        responseVO.setUsername(init.getUsername());
         return ResponseUtils.success(responseVO);
     }
 }

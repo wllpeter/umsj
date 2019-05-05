@@ -10,6 +10,12 @@ public class UserInfoResponseVO {
 
     private List<String> roles;
 
+    private String jobTitle;
+
+    private String department;
+
+    private String workNo;
+
     public String getUsername() {
         return username;
     }
@@ -32,5 +38,29 @@ public class UserInfoResponseVO {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getWorkNo() {
+        return workNo;
+    }
+
+    public void setWorkNo(String workNo) {
+        this.workNo = workNo;
     }
 }
