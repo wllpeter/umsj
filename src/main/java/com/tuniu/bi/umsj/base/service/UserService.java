@@ -4,7 +4,7 @@ import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
-import com.tuniu.bi.umsj.base.vo.UserUpdateReqeustVO;
+import com.tuniu.bi.umsj.base.vo.UserUpdateRequestVO;
 
 import java.util.List;
 
@@ -73,5 +73,5 @@ public interface UserService {
      * @param userUpdateReqeustVO
      * @return
      */
-    int updateUser(UserUpdateReqeustVO userUpdateReqeustVO);
+    int updateUser(UserUpdateRequestVO userUpdateReqeustVO);
 }

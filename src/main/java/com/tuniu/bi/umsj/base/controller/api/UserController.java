@@ -123,7 +123,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public Response createUser(@RequestBody @Valid UserUpdateReqeustVO requestVO) throws AbstractException {
+    public Response createUser(@RequestBody @Valid UserUpdateRequestVO requestVO) throws AbstractException {
         userService.updateUser(requestVO);
         return ResponseUtils.success("用户创建成功");
     }

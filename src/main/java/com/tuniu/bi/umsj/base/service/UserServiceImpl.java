@@ -1,8 +1,8 @@
 package com.tuniu.bi.umsj.base.service;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.base.dao.entity.*;
 import com.tuniu.bi.umsj.base.dao.mapper.OaUserMapper;
@@ -11,10 +11,9 @@ import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.utils.BeanMapper;
 import com.tuniu.bi.umsj.base.vo.*;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.*;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.checkerframework.checker.units.qual.A;
+import ma.glasnost.orika.metadata.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,8 +183,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(UserUpdateReqeustVO userUpdateReqeustVO) {
+    public int updateUser(UserUpdateRequestVO userUpdateReqeustVO) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+        mapperFactory.getConverterFactory().registerConverter("fromListConvert", new CustomConverter<Object, Object>() {
+            @Override
+            public Object convert(Object o, Type<?> type, MappingContext mappingContext) {
+                List o1 = (List) o;
+                String result = Joiner.on(",").join(o1);
+                return result;
+            }
+        });
+        mapperFactory.classMap(UserUpdateRequestVO.class, UserEntity.class).
+                field("id", "id").
+                fieldMap("roleCodes", "roleCodes").converter("fromListConvert").add().byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         UserEntity userEntity = mapper.map(userUpdateReqeustVO, UserEntity.class);
         return userMapper.update(userEntity);
