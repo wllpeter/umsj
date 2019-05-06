@@ -1,5 +1,6 @@
 package com.tuniu.bi.umsj.base.service;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
@@ -11,6 +12,10 @@ import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
+import com.tuniu.bi.umsj.base.vo.UserUpdateReqeustVO;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +165,9 @@ public class UserServiceImpl implements UserService {
         if (pageSize == null) {
             pageSize = 20;
         }
-        PageHelper.startPage(page, pageSize);
+        String sortBy = StringUtils.isEmpty(requestVO.getSortBy()) ? "id" : requestVO.getSortBy();
+        String order = StringUtils.isEmpty(requestVO.getOrder()) ? "DESC" : requestVO.getOrder();
+        PageHelper.startPage(page, pageSize, sortBy + " " + order);
         List<UserEntity> many = userMapper.findMany(requestVO.getUsername());
         PageInfo<UserEntity> pageInfo = new PageInfo<>(many, pageSize);
         userListResponseVO.setPageNum(pageInfo.getPageNum());
@@ -169,5 +176,13 @@ public class UserServiceImpl implements UserService {
         userListResponseVO.setPages(pageInfo.getPages());
         userListResponseVO.setUserList(many);
         return userListResponseVO;
+    }
+
+    @Override
+    public int updateUser(UserUpdateReqeustVO userUpdateReqeustVO) {
+        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+        MapperFacade mapper = mapperFactory.getMapperFacade();
+        UserEntity userEntity = mapper.map(userUpdateReqeustVO, UserEntity.class);
+        return userMapper.update(userEntity);
     }
 }

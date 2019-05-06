@@ -4,6 +4,7 @@ import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
+import com.tuniu.bi.umsj.base.vo.UserUpdateReqeustVO;
 
 import java.util.List;
 
@@ -66,4 +67,11 @@ public interface UserService {
      * @throws AbstractException
      */
     UserListResponseVO findMany(UserListRequestVO requestVO) throws AbstractException;
+
+    /**
+     * 更新用户星系
+     * @param userUpdateReqeustVO
+     * @return
+     */
+    int updateUser(UserUpdateReqeustVO userUpdateReqeustVO);
 }

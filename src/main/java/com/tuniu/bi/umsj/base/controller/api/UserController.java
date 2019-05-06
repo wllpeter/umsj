@@ -87,7 +87,11 @@ public class UserController {
             @ApiImplicitParam(name = "pageSize", dataType = "int", dataTypeClass = Integer.class, value = "每页数量", paramType = "query"),
     })
     @RequestMapping(value = "/findMany", method = RequestMethod.GET)
-    public Response<UserListResponseVO> findMany(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "pageNum", required = false) Integer pageNum, @RequestParam(value = "pageSize", required = false) Integer pageSize) throws AbstractException {
+    public Response<UserListResponseVO> findMany(@RequestParam(value = "username", required = false) String username,
+                                                 @RequestParam(value = "pageNum", required = false) Integer pageNum,
+                                                 @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                 @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                 @RequestParam(value = "order", required = false) String order) throws AbstractException {
         UserListRequestVO requestVO = new UserListRequestVO();
         requestVO.setUsername(username);
         requestVO.setPageNum(pageNum);
@@ -107,6 +111,20 @@ public class UserController {
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public Response createUser(@RequestBody @Valid UserRequestVO requestVO) throws AbstractException {
         userService.init(requestVO.getUsername(), requestVO.getRoleCodes());
+        return ResponseUtils.success("用户创建成功");
+    }
+
+    /**
+     * 修改用户
+     *
+     * @return
+     * @throws AbstractException
+     * @Param userEntity
+     */
+    @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    public Response createUser(@RequestBody @Valid UserUpdateReqeustVO requestVO) throws AbstractException {
+        userService.updateUser(requestVO);
         return ResponseUtils.success("用户创建成功");
     }
 
