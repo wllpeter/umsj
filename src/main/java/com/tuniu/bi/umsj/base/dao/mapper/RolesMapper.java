@@ -18,4 +18,11 @@ public interface RolesMapper {
      * @return
      */
     List<RolesEntity> findMany(RolesParamEntity rolesParamEntity);
+
+
+    /**
+     * 查询所有角色
+     * @return
+     */
+    List<RolesEntity> findAll();
 }

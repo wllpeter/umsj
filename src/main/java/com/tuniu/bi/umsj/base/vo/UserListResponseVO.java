@@ -6,13 +6,13 @@ import java.util.List;
 
 public class UserListResponseVO extends BaseListResponseVO {
 
-    private List<UserEntity> userList;
+    private List<UserItem> userList;
 
-    public List<UserEntity> getUserList() {
+    public List<UserItem> getUserList() {
         return userList;
     }
 
-    public void setUserList(List<UserEntity> userList) {
+    public void setUserList(List<UserItem> userList) {
         this.userList = userList;
     }
 }

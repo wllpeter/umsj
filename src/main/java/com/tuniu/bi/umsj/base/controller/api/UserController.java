@@ -5,6 +5,7 @@ import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.OaClientService;
 import com.tuniu.bi.umsj.base.service.UserService;
+import com.tuniu.bi.umsj.base.utils.BeanMapper;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
 import com.tuniu.bi.umsj.base.vo.*;
@@ -12,9 +13,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -66,7 +64,7 @@ public class UserController {
     @ApiOperation(value = "根据id查询用户信息", notes = "根据唯一标识查询用户信息")
     @ApiImplicitParam(name = "id", dataType = "int", dataTypeClass = Integer.class, value = "用户唯一标识", paramType = "query", required = true)
     @RequestMapping(value = "/findUser", method = RequestMethod.GET)
-    public ResponseEntity<UserEntity> findUser(@RequestParam("id") Integer id) {
+    public ResponseEntity<UserEntity> findUser(@RequestParam(value = "id", required = true) Integer id) {
         UserEntity byId = userService.findById(id);
         return ResponseEntity.ok(byId);
     }
@@ -88,14 +86,16 @@ public class UserController {
     })
     @RequestMapping(value = "/findMany", method = RequestMethod.GET)
     public Response<UserListResponseVO> findMany(@RequestParam(value = "username", required = false) String username,
-                                                 @RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                                 @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                 @RequestParam(value = "sortBy", required = false) String sortBy,
-                                                 @RequestParam(value = "order", required = false) String order) throws AbstractException {
+                                                 @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                 @RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy,
+                                                 @RequestParam(value = "order", required = false, defaultValue = "desc") String order) throws AbstractException {
         UserListRequestVO requestVO = new UserListRequestVO();
         requestVO.setUsername(username);
         requestVO.setPageNum(pageNum);
         requestVO.setPageSize(pageSize);
+        requestVO.setSortBy(sortBy);
+        requestVO.setOrder(order);
         UserListResponseVO response = userService.findMany(requestVO);
         return ResponseUtils.success(response);
     }
@@ -138,9 +138,7 @@ public class UserController {
         String username = JwtUtils.getUsername(token);
         UserEntity init = userService.init(username);
 
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        MapperFacade mapper = mapperFactory.getMapperFacade();
-        UserInfoResponseVO responseVO = mapper.map(init, UserInfoResponseVO.class);
+        UserInfoResponseVO responseVO = BeanMapper.map(init, UserInfoResponseVO.class);
         if (StringUtils.isEmpty(init.getRoleCodes())) {
             responseVO.setRoles(Collections.emptyList());
         } else {

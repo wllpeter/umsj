@@ -29,4 +29,11 @@
             </if>
         </where>
     </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles
+        ORDER BY id DESC
+    </select>
 </mapper>

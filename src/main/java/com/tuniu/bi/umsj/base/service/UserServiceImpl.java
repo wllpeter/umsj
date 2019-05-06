@@ -4,18 +4,17 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
-import com.tuniu.bi.umsj.base.dao.entity.OaUserEntity;
-import com.tuniu.bi.umsj.base.dao.entity.OaUserParamEntity;
-import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
+import com.tuniu.bi.umsj.base.dao.entity.*;
 import com.tuniu.bi.umsj.base.dao.mapper.OaUserMapper;
+import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
-import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
-import com.tuniu.bi.umsj.base.vo.UserUpdateReqeustVO;
+import com.tuniu.bi.umsj.base.utils.BeanMapper;
+import com.tuniu.bi.umsj.base.vo.*;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private OaUserMapper oaUserMapper;
+
+    @Autowired
+    private RolesMapper rolesMapper;
 
     /**
      * 邮箱后缀
@@ -157,24 +160,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserListResponseVO findMany(UserListRequestVO requestVO) throws AbstractException {
         UserListResponseVO userListResponseVO = new UserListResponseVO();
-        Integer page = requestVO.getPageNum();
-        if (page == null) {
-            page = 1;
-        }
-        Integer pageSize = requestVO.getPageSize();
-        if (pageSize == null) {
-            pageSize = 20;
-        }
-        String sortBy = StringUtils.isEmpty(requestVO.getSortBy()) ? "id" : requestVO.getSortBy();
-        String order = StringUtils.isEmpty(requestVO.getOrder()) ? "DESC" : requestVO.getOrder();
-        PageHelper.startPage(page, pageSize, sortBy + " " + order);
+        PageHelper.startPage(requestVO.getPageNum(), requestVO.getPageSize(), requestVO.getSortBy() + " " + requestVO.getOrder());
         List<UserEntity> many = userMapper.findMany(requestVO.getUsername());
-        PageInfo<UserEntity> pageInfo = new PageInfo<>(many, pageSize);
+        List<UserItem> userItems = BeanMapper.mapList(many, UserEntity.class, UserItem.class);
+
+        RolesParamEntity rolesParamEntity = new RolesParamEntity();
+        for (UserItem userItem : userItems) {
+            // 查询roleCodes的名称
+            String roleCodes = userItem.getRoleCodes();
+            List<String> codes = Arrays.asList(roleCodes.split(","));
+            rolesParamEntity.setCodes(codes);
+            List<RolesEntity> rolesList = rolesMapper.findMany(rolesParamEntity);
+            List<RoleItem> roleItems = BeanMapper.mapList(rolesList, RolesEntity.class, RoleItem.class);
+            userItem.setRoleItems(roleItems);
+        }
+        PageInfo<UserEntity> pageInfo = new PageInfo<>(many, requestVO.getPageSize());
         userListResponseVO.setPageNum(pageInfo.getPageNum());
         userListResponseVO.setPageSize(pageInfo.getPageSize());
         userListResponseVO.setTotal(pageInfo.getTotal());
         userListResponseVO.setPages(pageInfo.getPages());
-        userListResponseVO.setUserList(many);
+        userListResponseVO.setUserList(userItems);
         return userListResponseVO;
     }
 
