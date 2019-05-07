@@ -28,7 +28,7 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConfigConst.expire))
                 .signWith(SignatureAlgorithm.HS512, SecurityConfigConst.key)
                 .compact();
-        return "Bearer " + jwt;
+        return jwt;
     }
 
     /**
@@ -39,7 +39,7 @@ public class JwtUtils {
     public static void validateToken(String token) {
         Jwts.parser()
                 .setSigningKey(SecurityConfigConst.key)
-                .parseClaimsJws(token.replace("Bearer ", ""))
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -52,7 +52,7 @@ public class JwtUtils {
         String username = "";
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConfigConst.key)
-                .parseClaimsJws(token.replace("Bearer ", ""))
+                .parseClaimsJws(token)
                 .getBody();
         username = (String) claims.get("username");
         return username;
@@ -67,7 +67,7 @@ public class JwtUtils {
     public static boolean checkToken(String token) {
         Jwts.parser()
                 .setSigningKey(SecurityConfigConst.key)
-                .parseClaimsJws(token.replace("Bearer ", ""))
+                .parseClaimsJws(token)
                 .getBody();
         return true;
     }
