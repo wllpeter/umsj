@@ -16,6 +16,7 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import ma.glasnost.orika.metadata.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -170,6 +171,10 @@ public class UserServiceImpl implements UserService {
             List<String> codes = Arrays.asList(roleCodes.split(","));
             rolesParamEntity.setCodes(codes);
             List<RolesEntity> rolesList = rolesMapper.findMany(rolesParamEntity);
+            List<RoleItem> roleItemList = new ArrayList<>();
+            for (RolesEntity rolesEntity : rolesList) {
+
+            }
             List<RoleItem> roleItems = BeanMapper.mapList(rolesList, RolesEntity.class, RoleItem.class);
             userItem.setRoleItems(roleItems);
         }
@@ -184,20 +189,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUser(UserUpdateRequestVO userUpdateReqeustVO) {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        mapperFactory.getConverterFactory().registerConverter("fromListConvert", new CustomConverter<Object, Object>() {
-            @Override
-            public Object convert(Object o, Type<?> type, MappingContext mappingContext) {
-                List o1 = (List) o;
-                String result = Joiner.on(",").join(o1);
-                return result;
-            }
-        });
-        mapperFactory.classMap(UserUpdateRequestVO.class, UserEntity.class).
-                field("id", "id").
-                fieldMap("roleCodes", "roleCodes").converter("fromListConvert").add().byDefault().register();
-        MapperFacade mapper = mapperFactory.getMapperFacade();
-        UserEntity userEntity = mapper.map(userUpdateReqeustVO, UserEntity.class);
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(userUpdateReqeustVO, userEntity, "roleCodes");
+        String roleCodes = Joiner.on(",").join(userUpdateReqeustVO.getRoleCodes());
+        userEntity.setRoleCodes(roleCodes);
         return userMapper.update(userEntity);
     }
 }
