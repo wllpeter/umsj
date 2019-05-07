@@ -21,7 +21,7 @@ public class InfoServiceImpl implements InfoService {
     public int insert(InfoEntity infoEntity) {
         infoMapper.insert(infoEntity);
         String s = null;
-        System.out.println(s.toString());
+        //System.out.println(s.toString());
         return 0;
     }
 }
