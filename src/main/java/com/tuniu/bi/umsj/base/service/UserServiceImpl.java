@@ -9,11 +9,7 @@ import com.tuniu.bi.umsj.base.dao.mapper.OaUserMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.utils.BeanMapper;
 import com.tuniu.bi.umsj.base.vo.*;
-import ma.glasnost.orika.*;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import ma.glasnost.orika.metadata.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -162,28 +158,28 @@ public class UserServiceImpl implements UserService {
         UserListResponseVO userListResponseVO = new UserListResponseVO();
         PageHelper.startPage(requestVO.getPageNum(), requestVO.getPageSize(), requestVO.getSortBy() + " " + requestVO.getOrder());
         List<UserEntity> many = userMapper.findMany(requestVO.getUsername());
-        List<UserItem> userItems = BeanMapper.mapList(many, UserEntity.class, UserItem.class);
-
+        List<UserItem> userItemList = new ArrayList<>();
         RolesParamEntity rolesParamEntity = new RolesParamEntity();
-        for (UserItem userItem : userItems) {
+        for (UserEntity userEntity : many) {
+            UserItem userItem = new UserItem();
+            BeanUtils.copyProperties(userEntity, userItem);
             // 查询roleCodes的名称
-            String roleCodes = userItem.getRoleCodes();
+            String roleCodes = userEntity.getRoleCodes();
             List<String> codes = Arrays.asList(roleCodes.split(","));
             rolesParamEntity.setCodes(codes);
             List<RolesEntity> rolesList = rolesMapper.findMany(rolesParamEntity);
             List<RoleItem> roleItemList = new ArrayList<>();
             for (RolesEntity rolesEntity : rolesList) {
-
+                RoleItem roleItem = new RoleItem();
+                BeanUtils.copyProperties(rolesEntity, roleItem);
+                roleItemList.add(roleItem);
             }
-            List<RoleItem> roleItems = BeanMapper.mapList(rolesList, RolesEntity.class, RoleItem.class);
-            userItem.setRoleItems(roleItems);
+            userItem.setRoleItems(roleItemList);
+            userItemList.add(userItem);
         }
         PageInfo<UserEntity> pageInfo = new PageInfo<>(many, requestVO.getPageSize());
-        userListResponseVO.setPageNum(pageInfo.getPageNum());
-        userListResponseVO.setPageSize(pageInfo.getPageSize());
-        userListResponseVO.setTotal(pageInfo.getTotal());
-        userListResponseVO.setPages(pageInfo.getPages());
-        userListResponseVO.setUserList(userItems);
+        userListResponseVO.injectPageInfo(pageInfo);
+        userListResponseVO.setUserList(userItemList);
         return userListResponseVO;
     }
 

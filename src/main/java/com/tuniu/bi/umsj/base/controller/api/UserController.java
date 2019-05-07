@@ -5,7 +5,6 @@ import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.OaClientService;
 import com.tuniu.bi.umsj.base.service.UserService;
-import com.tuniu.bi.umsj.base.utils.BeanMapper;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
 import com.tuniu.bi.umsj.base.vo.*;
@@ -13,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -41,7 +41,7 @@ public class UserController {
      */
     @ApiOperation(value = "用户登录", notes = "用户登录接口")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Response<Map<String, String>> login(@RequestBody @Valid  User user) throws AbstractException {
+    public Response<Map<String, String>> login(@RequestBody @Valid User user) throws AbstractException {
         String username = user.getUsername();
         String password = user.getPassword();
         // ldap 认证
@@ -123,14 +123,14 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public Response createUser(@RequestBody @Valid UserUpdateRequestVO requestVO) throws AbstractException {
+    public Response updateUser(@RequestBody @Valid UserUpdateRequestVO requestVO) throws AbstractException {
         userService.updateUser(requestVO);
         return ResponseUtils.success("用户更新成功");
     }
 
     @ApiOperation(value = "用户信息", notes = "用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public Response<UserInfoResponseVO> getInfo(HttpServletRequest request){
+    public Response<UserInfoResponseVO> getInfo(HttpServletRequest request) {
         String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)) {
             throw new CommonException("token参数为空");
@@ -138,7 +138,9 @@ public class UserController {
         String username = JwtUtils.getUsername(token);
         UserEntity init = userService.init(username);
 
-        UserInfoResponseVO responseVO = BeanMapper.map(init, UserInfoResponseVO.class);
+        UserInfoResponseVO responseVO = new UserInfoResponseVO();
+        BeanUtils.copyProperties(init, responseVO);
+
         if (StringUtils.isEmpty(init.getRoleCodes())) {
             responseVO.setRoles(Collections.emptyList());
         } else {

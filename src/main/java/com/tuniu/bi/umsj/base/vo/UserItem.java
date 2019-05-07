@@ -1,7 +1,5 @@
 package com.tuniu.bi.umsj.base.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 
 public class UserItem {
@@ -17,9 +15,6 @@ public class UserItem {
     private String createdAt;
 
     private String updatedAt;
-
-    @JsonIgnore
-    private String roleCodes;
 
     private List<RoleItem> roleItems;
 
@@ -69,14 +64,6 @@ public class UserItem {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getRoleCodes() {
-        return roleCodes;
-    }
-
-    public void setRoleCodes(String roleCodes) {
-        this.roleCodes = roleCodes;
     }
 
     public List<RoleItem> getRoleItems() {

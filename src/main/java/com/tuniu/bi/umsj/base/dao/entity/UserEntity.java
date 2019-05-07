@@ -2,6 +2,8 @@ package com.tuniu.bi.umsj.base.dao.entity;
 
 import javax.validation.constraints.NotBlank;
 
+
+
 /**
  * 用户实例
  *

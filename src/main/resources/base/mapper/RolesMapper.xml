@@ -19,6 +19,9 @@
         <include refid="Base_Column_List"/>
         FROM roles
         <where>
+            <if test="code != null">
+                AND code = #{code}
+            </if>
             <if test="codes != null and codes.size > 0">
                 AND code in
                 <foreach item="tmpCode" index="index"
@@ -36,4 +39,75 @@
         FROM roles
         ORDER BY id DESC
     </select>
+
+    <insert id="insert" parameterType="com.tuniu.bi.umsj.base.dao.entity.RolesEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO roles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                code,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="menus != null">
+                menus,
+            </if>
+            <if test="submenus != null">
+                submenus,
+            </if>
+            <if test="actions != null">
+                actions,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="menus != null">
+                #{menus,jdbcType=VARCHAR},
+            </if>
+            <if test="submenus != null">
+                #{submenus,jdbcType=VARCHAR},
+            </if>
+            <if test="actions != null">
+                #{actions,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findByPk" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM roles
+        WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.tuniu.bi.umsj.base.dao.entity.RolesEntity">
+        UPDATE roles
+        <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="menus != null">
+                menus = #{menus,jdbcType=VARCHAR},
+            </if>
+            <if test="submenus != null">
+                submenus = #{submenus,jdbcType=VARCHAR},
+            </if>
+            <if test="actions != null">
+                actions = #{actions,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPk">
+        DELETE FROM roles WHERE id = #{id}
+    </delete>
 </mapper>

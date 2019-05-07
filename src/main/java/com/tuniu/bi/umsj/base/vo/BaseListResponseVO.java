@@ -1,5 +1,7 @@
 package com.tuniu.bi.umsj.base.vo;
 
+import com.github.pagehelper.PageInfo;
+
 public class BaseListResponseVO {
 
     private Integer pageNum;
@@ -40,5 +42,12 @@ public class BaseListResponseVO {
 
     public void setPages(Integer pages) {
         this.pages = pages;
+    }
+
+    public void injectPageInfo(PageInfo pageInfo) {
+        this.pageNum = pageInfo.getPageNum();
+        this.pageSize = pageInfo.getPageSize();
+        this.pages = pageInfo.getPages();
+        this.total = pageInfo.getTotal();
     }
 }

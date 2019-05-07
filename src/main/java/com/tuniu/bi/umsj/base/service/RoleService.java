@@ -2,6 +2,7 @@ package com.tuniu.bi.umsj.base.service;
 
 import com.tuniu.bi.umsj.base.vo.RoleItem;
 import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
+import com.tuniu.bi.umsj.base.vo.RoleListResponseVO;
 
 import java.util.List;
 
@@ -20,5 +21,24 @@ public interface RoleService {
      * 分页查询
      * @param roleListRequestVO
      */
-    List<RoleItem> findMany(RoleListRequestVO roleListRequestVO);
+    RoleListResponseVO findMany(RoleListRequestVO roleListRequestVO);
+
+    /**
+     * 创建角色
+     * @param roleItem
+     * @return
+     */
+    int createRole(RoleItem roleItem);
+
+    /**
+     * 更新用户角色信息
+     * @param roleItem
+     */
+    int updateRole(RoleItem roleItem);
+
+    /**
+     * 根据id删除角色
+     * @param id
+     */
+    int deleteRole(Integer id);
 }

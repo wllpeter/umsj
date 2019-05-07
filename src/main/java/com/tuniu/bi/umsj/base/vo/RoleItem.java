@@ -1,19 +1,26 @@
 package com.tuniu.bi.umsj.base.vo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 public class RoleItem {
 
     private Integer id;
 
+    @NotBlank(message = "角色编码不能为空")
     private String code;
 
+    @NotBlank(message = "角色名称不能为空")
     private String name;
 
+    @NotEmpty(message = "菜单不能为空")
     private List<String> menus;
 
+    @NotEmpty(message = "子菜单不能为空")
     private List<String> subMenus;
 
+    @NotEmpty(message = "操作权限不能为空")
     private List<String> actions;
 
     private String createdAt;
