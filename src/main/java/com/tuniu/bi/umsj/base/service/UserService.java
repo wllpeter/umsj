@@ -2,6 +2,7 @@ package com.tuniu.bi.umsj.base.service;
 
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
+import com.tuniu.bi.umsj.base.vo.UserInfoResponseVO;
 import com.tuniu.bi.umsj.base.vo.UserListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UserListResponseVO;
 import com.tuniu.bi.umsj.base.vo.UserUpdateRequestVO;
@@ -74,4 +75,11 @@ public interface UserService {
      * @return
      */
     int updateUser(UserUpdateRequestVO userUpdateReqeustVO);
+
+    /**
+     * 根据用户名称补全用户信息
+     * @param username
+     * @return
+     */
+    UserInfoResponseVO getUserInfo(String username);
 }

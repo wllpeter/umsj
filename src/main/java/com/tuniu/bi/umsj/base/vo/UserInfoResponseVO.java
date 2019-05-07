@@ -2,6 +2,9 @@ package com.tuniu.bi.umsj.base.vo;
 
 import java.util.List;
 
+/**
+ * @author zhangwei21
+ */
 public class UserInfoResponseVO {
 
     private String username;
@@ -15,6 +18,10 @@ public class UserInfoResponseVO {
     private String department;
 
     private String workNo;
+
+    private List<String> menus;
+
+    private List<String> actions;
 
     public String getUsername() {
         return username;
@@ -62,5 +69,21 @@ public class UserInfoResponseVO {
 
     public void setWorkNo(String workNo) {
         this.workNo = workNo;
+    }
+
+    public List<String> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<String> menus) {
+        this.menus = menus;
+    }
+
+    public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
     }
 }

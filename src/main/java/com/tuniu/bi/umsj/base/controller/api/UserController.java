@@ -136,16 +136,6 @@ public class UserController {
             throw new CommonException("token参数为空");
         }
         String username = JwtUtils.getUsername(token);
-        UserEntity init = userService.init(username);
-
-        UserInfoResponseVO responseVO = new UserInfoResponseVO();
-        BeanUtils.copyProperties(init, responseVO);
-
-        if (StringUtils.isEmpty(init.getRoleCodes())) {
-            responseVO.setRoles(Collections.emptyList());
-        } else {
-            responseVO.setRoles(new ArrayList<>(StringUtils.commaDelimitedListToSet(init.getRoleCodes())));
-        }
-        return ResponseUtils.success(responseVO);
+        return ResponseUtils.success(userService.getUserInfo(username));
     }
 }

@@ -3,6 +3,7 @@ package com.tuniu.bi.umsj.base.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.tuniu.bi.umsj.base.dao.entity.*;
 import com.tuniu.bi.umsj.base.dao.mapper.OaUserMapper;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangwei21
@@ -190,5 +192,33 @@ public class UserServiceImpl implements UserService {
         String roleCodes = Joiner.on(",").join(userUpdateReqeustVO.getRoleCodes());
         userEntity.setRoleCodes(roleCodes);
         return userMapper.update(userEntity);
+    }
+
+    @Override
+    public UserInfoResponseVO getUserInfo(String username) {
+        UserInfoResponseVO responseVO = new UserInfoResponseVO();
+        UserEntity userEntity = userMapper.findByUsername(username);
+        String roleCodes = userEntity.getRoleCodes();
+        List<String> roleList = Arrays.asList(roleCodes.split(","));
+        RolesParamEntity rolesParamEntity = new RolesParamEntity();
+        rolesParamEntity.setCodes(roleList);
+        List<RolesEntity> many = rolesMapper.findMany(rolesParamEntity);
+        List<String> menus = new ArrayList<>();
+        List<String> actions = new ArrayList<>();
+        for (RolesEntity rolesEntity : many) {
+            List<String> tmpMenus = Splitter.on(",").trimResults().splitToList(rolesEntity.getMenus());
+            List<String> tmpSubMenus = Splitter.on(",").trimResults().splitToList(rolesEntity.getSubmenus());
+            menus.addAll(tmpMenus);
+            menus.addAll(tmpSubMenus);
+            List<String> tmpActions = Splitter.on(",").trimResults().splitToList(rolesEntity.getActions());
+            actions.addAll(tmpActions);
+        }
+        List<String> finalMenus = menus.stream().distinct().collect(Collectors.toList());
+        List<String> finalActions = actions.stream().distinct().collect(Collectors.toList());
+        BeanUtils.copyProperties(userEntity, responseVO);
+        responseVO.setActions(finalActions);
+        responseVO.setMenus(finalMenus);
+        responseVO.setRoles(roleList);
+        return responseVO;
     }
 }
