@@ -22,6 +22,9 @@
             <if test="code != null">
                 AND code = #{code}
             </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
             <if test="codes != null and codes.size > 0">
                 AND code in
                 <foreach item="tmpCode" index="index"

@@ -2,6 +2,7 @@ package com.tuniu.bi.umsj.base.dao.mapper;
 
 import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
+import com.tuniu.bi.umsj.base.dao.entity.UserParamEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -53,4 +54,11 @@ public interface UserMapper {
      * @return
      */
     List<UserEntity> findMany(@Param("username") String username);
+
+    /**
+     * 根据特定的参数查找
+     * @param userParamEntity
+     * @return
+     */
+    List<UserEntity> findByParams(UserParamEntity userParamEntity);
 }

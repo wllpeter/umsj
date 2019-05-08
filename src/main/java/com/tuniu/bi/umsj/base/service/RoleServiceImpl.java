@@ -5,7 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Joiner;
 import com.tuniu.bi.umsj.base.dao.entity.RolesEntity;
 import com.tuniu.bi.umsj.base.dao.entity.RolesParamEntity;
+import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
+import com.tuniu.bi.umsj.base.dao.entity.UserParamEntity;
 import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
+import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.vo.RoleItem;
 import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
@@ -27,6 +30,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RolesMapper rolesMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<RoleItem> findAll() {
@@ -54,8 +60,10 @@ public class RoleServiceImpl implements RoleService {
         for (RolesEntity rolesEntity : list) {
             RoleItem roleItem = new RoleItem();
             BeanUtils.copyProperties(rolesEntity, roleItem, "menus", "subMenus", "actions");
-            roleItem.setMenus(Arrays.asList(rolesEntity.getMenus().split(",")));
-            roleItem.setSubMenus(Arrays.asList(rolesEntity.getSubmenus().split(",")));
+            List<String> menus = new ArrayList<>();
+            menus.addAll(Arrays.asList(rolesEntity.getMenus().split(",")));
+            menus.addAll(Arrays.asList(rolesEntity.getSubmenus().split(",")));
+            roleItem.setMenus(menus);
             roleItem.setActions(Arrays.asList(rolesEntity.getActions().split(",")));
             roleItems.add(roleItem);
         }
@@ -73,6 +81,13 @@ public class RoleServiceImpl implements RoleService {
         if (!CollectionUtils.isEmpty(many)) {
             throw new CommonException("该角色的code已存在，请重新输入!");
         }
+        // 根据名称查找
+        rolesParamEntity.setName(roleItem.getName());
+        rolesParamEntity.setCode(null);
+        many = rolesMapper.findMany(rolesParamEntity);
+        if (!CollectionUtils.isEmpty(many)) {
+            throw new CommonException("该角色的名称已存在，请重新输入!");
+        }
         RolesEntity rolesEntity = new RolesEntity();
         BeanUtils.copyProperties(roleItem, rolesEntity, "menus", "subMenus", "actions");
         rolesEntity.setMenus(Joiner.on(",").join(roleItem.getMenus()));
@@ -88,6 +103,15 @@ public class RoleServiceImpl implements RoleService {
         if (one == null) {
             throw new CommonException("根据id[" + roleItem.getId() + "]查询不到角色信息");
         }
+        if (!one.getName().equals(roleItem.getName())) {
+            // 表示名称变更
+            RolesParamEntity rolesParamEntity = new RolesParamEntity();
+            rolesParamEntity.setName(roleItem.getName());
+            List<RolesEntity> many = rolesMapper.findMany(rolesParamEntity);
+            if (!CollectionUtils.isEmpty(many)) {
+                throw new CommonException("该角色的名称已存在，请重新输入!");
+            }
+        }
         one.setName(roleItem.getName());
         one.setMenus(Joiner.on(",").join(roleItem.getMenus()));
         one.setSubmenus(Joiner.on(",").join(roleItem.getSubMenus()));
@@ -97,6 +121,18 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int deleteRole(Integer id) {
+        //  查询改角色有没有被占用
+        RolesEntity byPk = rolesMapper.findByPk(id);
+        if (byPk == null) {
+            throw new CommonException("该角色不存在，无法删除");
+        }
+        // 查询用户列表是否有包含该角色的用户
+        UserParamEntity userParamEntity = new UserParamEntity();
+        userParamEntity.setRoleCode(byPk.getCode());
+        List<UserEntity> list = userMapper.findByParams(userParamEntity);
+        if (!CollectionUtils.isEmpty(list)) {
+            throw new CommonException("该角色已经被关联，无法删除");
+        }
         return rolesMapper.deleteByPk(id);
     }
 }

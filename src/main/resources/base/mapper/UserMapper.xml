@@ -135,4 +135,13 @@
             <if test="username != null and username != ''">AND username LIKE CONCAT('%',#{username},'%')</if>
         </where>
     </select>
+
+    <select id="findByParams" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumn"/>
+        FROM user
+        <where>
+            <if test="roleCode != null and roleCode != ''">AND FIND_IN_SET(#{roleCode}, role_codes)</if>
+        </where>
+    </select>
 </mapper>
