@@ -1,5 +1,6 @@
 package com.tuniu.bi.umsj.base.controller.api;
 
+import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.RoleService;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
@@ -65,7 +66,7 @@ public class RoleController {
      */
     @ApiOperation(value = "创建角色", notes = "创建角色接口")
     @RequestMapping(value = "/createRole", method = RequestMethod.POST)
-    public Response createRole(@RequestBody @Valid RoleItem roleItem) {
+    public Response createRole(@RequestBody @Valid RoleItem roleItem) throws AbstractException {
         roleService.createRole(roleItem);
         return ResponseUtils.success("角色创建成功");
     }
@@ -75,7 +76,7 @@ public class RoleController {
      */
     @ApiOperation(value = "更新角色", notes = " 更新角色接口")
     @RequestMapping(value = "/updateRole", method = RequestMethod.POST)
-    public Response<RoleListResponseVO> updateRole(@RequestBody @Valid RoleItem roleItem) {
+    public Response<RoleListResponseVO> updateRole(@RequestBody @Valid RoleItem roleItem) throws AbstractException {
         if (roleItem.getId() == null) {
             throw new CommonException("编辑的id不能为空");
         }
@@ -88,7 +89,7 @@ public class RoleController {
      */
     @ApiOperation(value = "删除角色", notes = " 删除角色接口")
     @RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
-    public Response<RoleListResponseVO> deleteRole(@RequestBody RoleItem roleItem) {
+    public Response<RoleListResponseVO> deleteRole(@RequestBody RoleItem roleItem) throws AbstractException {
         if (roleItem.getId() == null) {
             throw new CommonException("删除的id不能为空");
         }

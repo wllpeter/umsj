@@ -9,6 +9,7 @@ import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.dao.entity.UserParamEntity;
 import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
+import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.vo.RoleItem;
 import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
@@ -73,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int createRole(RoleItem roleItem) {
+    public int createRole(RoleItem roleItem) throws AbstractException {
         // 查询roleCode是否已经存在
         RolesParamEntity rolesParamEntity = new RolesParamEntity();
         rolesParamEntity.setCode(roleItem.getCode());
@@ -97,7 +98,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int updateRole(RoleItem roleItem) {
+    public int updateRole(RoleItem roleItem) throws AbstractException {
         // 根据id查询
         RolesEntity one = rolesMapper.findByPk(roleItem.getId());
         if (one == null) {
@@ -120,7 +121,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int deleteRole(Integer id) {
+    public int deleteRole(Integer id) throws AbstractException {
         //  查询改角色有没有被占用
         RolesEntity byPk = rolesMapper.findByPk(id);
         if (byPk == null) {

@@ -1,5 +1,6 @@
 package com.tuniu.bi.umsj.base.controller.api;
 
+import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import org.springframework.util.StringUtils;
@@ -15,7 +16,7 @@ public class BaseController {
      * @param request
      * @return
      */
-    public String getUsernameFromToken(HttpServletRequest request) {
+    public String getUsernameFromToken(HttpServletRequest request) throws AbstractException {
         String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)) {
             throw new CommonException("token参数为空");

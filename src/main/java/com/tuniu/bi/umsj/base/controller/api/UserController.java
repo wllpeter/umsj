@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = "用户相关接口")
 @RestController
 @RequestMapping("/api/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     /**
      * 登录（目前已经在拦截器中拦截,此处放着用于swagger中接口展示）
@@ -123,14 +123,14 @@ public class UserController extends BaseController{
      */
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public Response updateUser(@RequestBody @Valid UserUpdateRequestVO requestVO) throws AbstractException {
+    public Response updateUser(@RequestBody @Valid UserUpdateRequestVO requestVO) {
         userService.updateUser(requestVO);
         return ResponseUtils.success("用户更新成功");
     }
 
     @ApiOperation(value = "用户信息", notes = "用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public Response<UserInfoResponseVO> getInfo(HttpServletRequest request) {
+    public Response<UserInfoResponseVO> getInfo(HttpServletRequest request) throws AbstractException {
         return ResponseUtils.success(userService.getUserInfo(getUsernameFromToken(request)));
     }
 }

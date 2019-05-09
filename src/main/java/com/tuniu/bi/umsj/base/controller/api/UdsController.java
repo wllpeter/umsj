@@ -50,6 +50,7 @@ public class UdsController extends BaseController {
 
     /**
      * 创建发布单
+     *
      * @param udsPublishVO
      * @return
      * @throws AbstractException
@@ -63,23 +64,25 @@ public class UdsController extends BaseController {
 
     /**
      * 更新发布单内容
+     *
      * @param udsPublishVO
      * @return
      * @throws AbstractException
      */
     @RequestMapping(value = "/updatePublish", method = RequestMethod.POST)
-    public Response updatePublish(@RequestData @Valid UdsPublishVO udsPublishVO, HttpServletRequest request) {
+    public Response updatePublish(@RequestData @Valid UdsPublishVO udsPublishVO, HttpServletRequest request) throws AbstractException {
         udsPublishService.updatePublish(udsPublishVO, getUsernameFromToken(request));
         return ResponseUtils.success();
     }
 
     /**
      * 更新发布单状态
+     *
      * @param udsPublishVO
      * @return
      * @throws AbstractException
      */
-    public Response updatePublishStatus(@RequestData UdsPublishVO udsPublishVO) {
+    public Response updatePublishStatus(@RequestData UdsPublishVO udsPublishVO) throws AbstractException {
         if (udsPublishVO == null || udsPublishVO.getId() == null || udsPublishVO.getStatus() == null) {
             throw new CommonException("参数错误");
         }

@@ -3,6 +3,7 @@ package com.tuniu.bi.umsj.uds.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tuniu.bi.umsj.base.constant.UdsConst;
+import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.vo.UdsPublishItemVO;
 import com.tuniu.bi.umsj.base.vo.UdsPublishListRequestVO;
@@ -80,7 +81,7 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void updatePublish(UdsPublishVO udsPublishVO, String username) {
+    public void updatePublish(UdsPublishVO udsPublishVO, String username) throws AbstractException {
         // 查询发布单的信息
         UdsPublishEntity oldUdsPublishEntity = udsPublishMapper.findByPk(udsPublishVO.getId());
         if (oldUdsPublishEntity == null) {
