@@ -11,9 +11,7 @@ import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
 import com.tuniu.bi.umsj.base.dao.mapper.UserMapper;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
-import com.tuniu.bi.umsj.base.vo.RoleItem;
-import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
-import com.tuniu.bi.umsj.base.vo.RoleListResponseVO;
+import com.tuniu.bi.umsj.base.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,49 +72,49 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int createRole(RoleItem roleItem) throws AbstractException {
+    public int createRole(CreateRoleReqeustVO reqeustVO) throws AbstractException {
         // 查询roleCode是否已经存在
         RolesParamEntity rolesParamEntity = new RolesParamEntity();
-        rolesParamEntity.setCode(roleItem.getCode());
+        rolesParamEntity.setCode(reqeustVO.getCode());
         List<RolesEntity> many = rolesMapper.findMany(rolesParamEntity);
         if (!CollectionUtils.isEmpty(many)) {
             throw new CommonException("该角色的code已存在，请重新输入!");
         }
         // 根据名称查找
-        rolesParamEntity.setName(roleItem.getName());
+        rolesParamEntity.setName(reqeustVO.getName());
         rolesParamEntity.setCode(null);
         many = rolesMapper.findMany(rolesParamEntity);
         if (!CollectionUtils.isEmpty(many)) {
             throw new CommonException("该角色的名称已存在，请重新输入!");
         }
         RolesEntity rolesEntity = new RolesEntity();
-        BeanUtils.copyProperties(roleItem, rolesEntity, "menus", "subMenus", "actions");
-        rolesEntity.setMenus(Joiner.on(",").join(roleItem.getMenus()));
-        rolesEntity.setSubmenus(Joiner.on(",").join(roleItem.getSubMenus()));
-        rolesEntity.setActions(Joiner.on(",").join(roleItem.getActions()));
+        BeanUtils.copyProperties(reqeustVO, rolesEntity, "menus", "subMenus", "actions");
+        rolesEntity.setMenus(Joiner.on(",").join(reqeustVO.getMenus()));
+        rolesEntity.setSubmenus(Joiner.on(",").join(reqeustVO.getSubMenus()));
+        rolesEntity.setActions(Joiner.on(",").join(reqeustVO.getActions()));
         return rolesMapper.insert(rolesEntity);
     }
 
     @Override
-    public int updateRole(RoleItem roleItem) throws AbstractException {
+    public int updateRole(UpdateRoleRequestVO requestVO) throws AbstractException {
         // 根据id查询
-        RolesEntity one = rolesMapper.findByPk(roleItem.getId());
+        RolesEntity one = rolesMapper.findByPk(requestVO.getId());
         if (one == null) {
-            throw new CommonException("根据id[" + roleItem.getId() + "]查询不到角色信息");
+            throw new CommonException("根据id[" + requestVO.getId() + "]查询不到角色信息");
         }
-        if (!one.getName().equals(roleItem.getName())) {
+        if (!one.getName().equals(requestVO.getName())) {
             // 表示名称变更
             RolesParamEntity rolesParamEntity = new RolesParamEntity();
-            rolesParamEntity.setName(roleItem.getName());
+            rolesParamEntity.setName(requestVO.getName());
             List<RolesEntity> many = rolesMapper.findMany(rolesParamEntity);
             if (!CollectionUtils.isEmpty(many)) {
                 throw new CommonException("该角色的名称已存在，请重新输入!");
             }
         }
-        one.setName(roleItem.getName());
-        one.setMenus(Joiner.on(",").join(roleItem.getMenus()));
-        one.setSubmenus(Joiner.on(",").join(roleItem.getSubMenus()));
-        one.setActions(Joiner.on(",").join(roleItem.getActions()));
+        one.setName(requestVO.getName());
+        one.setMenus(Joiner.on(",").join(requestVO.getMenus()));
+        one.setSubmenus(Joiner.on(",").join(requestVO.getSubMenus()));
+        one.setActions(Joiner.on(",").join(requestVO.getActions()));
         return rolesMapper.update(one);
     }
 

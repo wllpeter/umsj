@@ -1,9 +1,7 @@
 package com.tuniu.bi.umsj.base.service;
 
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.vo.RoleItem;
-import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
-import com.tuniu.bi.umsj.base.vo.RoleListResponseVO;
+import com.tuniu.bi.umsj.base.vo.*;
 
 import java.util.List;
 
@@ -26,16 +24,16 @@ public interface RoleService {
 
     /**
      * 创建角色
-     * @param roleItem
+     * @param reqeustVO
      * @return
      */
-    int createRole(RoleItem roleItem) throws AbstractException;
+    int createRole(CreateRoleReqeustVO reqeustVO) throws AbstractException;
 
     /**
      * 更新用户角色信息
-     * @param roleItem
+     * @param requestVO
      */
-    int updateRole(RoleItem roleItem) throws AbstractException;
+    int updateRole(UpdateRoleRequestVO requestVO) throws AbstractException;
 
     /**
      * 根据id删除角色

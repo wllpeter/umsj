@@ -1,13 +1,9 @@
 package com.tuniu.bi.umsj.base.controller.api;
 
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.RoleService;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
-import com.tuniu.bi.umsj.base.vo.Response;
-import com.tuniu.bi.umsj.base.vo.RoleItem;
-import com.tuniu.bi.umsj.base.vo.RoleListRequestVO;
-import com.tuniu.bi.umsj.base.vo.RoleListResponseVO;
+import com.tuniu.bi.umsj.base.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +65,8 @@ public class RoleController {
     @ApiOperation(value = "创建角色", notes = "创建角色接口")
     @RequestMapping(value = "/createRole", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all')")
-    public Response createRole(@RequestBody @Valid RoleItem roleItem) throws AbstractException {
-        roleService.createRole(roleItem);
+    public Response createRole(@RequestBody @Valid CreateRoleReqeustVO reqeustVO) throws AbstractException {
+        roleService.createRole(reqeustVO);
         return ResponseUtils.success("角色创建成功");
     }
 
@@ -80,11 +76,8 @@ public class RoleController {
     @ApiOperation(value = "更新角色", notes = " 更新角色接口")
     @RequestMapping(value = "/updateRole", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all')")
-    public Response<RoleListResponseVO> updateRole(@RequestBody @Valid RoleItem roleItem) throws AbstractException {
-        if (roleItem.getId() == null) {
-            throw new CommonException("编辑的id不能为空");
-        }
-        roleService.updateRole(roleItem);
+    public Response<RoleListResponseVO> updateRole(@RequestBody @Valid UpdateRoleRequestVO requestVO) throws AbstractException {
+        roleService.updateRole(requestVO);
         return ResponseUtils.success("角色更新成功");
     }
 
@@ -94,11 +87,8 @@ public class RoleController {
     @ApiOperation(value = "删除角色", notes = " 删除角色接口")
     @RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all')")
-    public Response<RoleListResponseVO> deleteRole(@RequestBody RoleItem roleItem) throws AbstractException {
-        if (roleItem.getId() == null) {
-            throw new CommonException("删除的id不能为空");
-        }
-        roleService.deleteRole(roleItem.getId());
+    public Response<RoleListResponseVO> deleteRole(@RequestBody DeleteRoleRequestVO requestVO) throws AbstractException {
+        roleService.deleteRole(requestVO.getId());
         return ResponseUtils.success("角色删除成功");
     }
 }

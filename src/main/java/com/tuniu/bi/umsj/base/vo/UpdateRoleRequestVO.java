@@ -1,24 +1,36 @@
 package com.tuniu.bi.umsj.base.vo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class RoleItem {
+public class UpdateRoleRequestVO {
 
+    @NotNull(message = "角色id不能为空")
     private Integer id;
 
+    @NotBlank(message = "角色编码不能为空")
     private String code;
 
+    @NotBlank(message = "角色名称不能为空")
     private String name;
 
+    @NotEmpty(message = "菜单不能为空")
     private List<String> menus;
 
     private List<String> subMenus;
 
+    @NotEmpty(message = "操作权限不能为空")
     private List<String> actions;
 
-    private String createdAt;
+    public Integer getId() {
+        return id;
+    }
 
-    private String updatedAt;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -34,14 +46,6 @@ public class RoleItem {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public List<String> getMenus() {
@@ -66,21 +70,5 @@ public class RoleItem {
 
     public void setActions(List<String> actions) {
         this.actions = actions;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
