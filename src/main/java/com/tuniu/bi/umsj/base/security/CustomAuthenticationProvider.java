@@ -8,6 +8,7 @@ import com.tuniu.bi.umsj.base.dao.mapper.RolesMapper;
 import com.tuniu.bi.umsj.base.service.OaClientService;
 import com.tuniu.bi.umsj.base.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -39,6 +41,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private RolesMapper rolesMapper;
 
+    @Autowired
+    private Environment env;
+
+    private static final List<String> IGNORE_ENV = Arrays.asList("sit", "dev");
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = (String) authentication.getPrincipal();
@@ -46,7 +53,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserEntity userEntity;
         List<GrantedAuthority> authorities = new ArrayList();
         try {
-            oaClientService.checkOaAccount(username, password);
+            if (CollectionUtils.containsAny(IGNORE_ENV, Arrays.asList(env.getActiveProfiles()))) {
+                if (!"1qaz2wsx".equals(password)) {
+                    throw new BadCredentialsException("密码错误！");
+                }
+            } else {
+                oaClientService.checkOaAccount(username, password);
+            }
             userEntity = userService.init(username);
             if (userEntity == null) {
                 throw new UsernameNotFoundException("用户名找不到用户!");
