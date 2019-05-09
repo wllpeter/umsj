@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -52,24 +53,9 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         return new CorsFilter(source);
     }
 
-    @Bean
-    public HttpMessageConverter<String> responseBodyConverter() {
-        StringHttpMessageConverter converter = new StringHttpMessageConverter(
-                Charset.forName("UTF-8"));
-        return converter;
-    }
-
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        super.configureMessageConverters(converters);
-        converters.add(responseBodyConverter());
+        converters.clear();
+        converters.add(new MappingJackson2HttpMessageConverter());
     }
-
-//    @Override
-//    protected void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedMethods("*")
-//                .allowedOrigins("*")
-//                .allowedHeaders("*");
-//    }
 }
