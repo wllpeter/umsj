@@ -3,6 +3,7 @@ package com.tuniu.bi.umsj.uds.dao.mapper;
 import com.tuniu.bi.umsj.base.annotation.UmsMapper;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishEntity;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishParamEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -32,4 +33,11 @@ public interface UdsPublishMapper {
      * @return
      */
     int update(UdsPublishEntity UdsPublishEntity);
+
+    /**
+     * 根据主键查找
+     * @param id
+     * @return
+     */
+    UdsPublishEntity findByPk(@Param("id")Integer id);
 }

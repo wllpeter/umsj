@@ -26,7 +26,7 @@ public interface UdsPublishService {
      * 更新发布单内容
      * @param udsPublishVO
      */
-    void updatePublish(UdsPublishVO udsPublishVO);
+    void updatePublish(UdsPublishVO udsPublishVO, String username);
 
     /**
      * 更新发布单的状态

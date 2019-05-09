@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = "用户相关接口")
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class UserController extends BaseController{
 
     /**
      * 登录（目前已经在拦截器中拦截,此处放着用于swagger中接口展示）
@@ -131,11 +131,6 @@ public class UserController {
     @ApiOperation(value = "用户信息", notes = "用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public Response<UserInfoResponseVO> getInfo(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        if (StringUtils.isEmpty(token)) {
-            throw new CommonException("token参数为空");
-        }
-        String username = JwtUtils.getUsername(token);
-        return ResponseUtils.success(userService.getUserInfo(username));
+        return ResponseUtils.success(userService.getUserInfo(getUsernameFromToken(request)));
     }
 }

@@ -179,4 +179,11 @@
         </set>
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findByPk" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uds_publish
+        WHERE id = #{id}
+    </select>
 </mapper>

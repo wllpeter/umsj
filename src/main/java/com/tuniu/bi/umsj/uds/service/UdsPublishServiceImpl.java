@@ -3,6 +3,7 @@ package com.tuniu.bi.umsj.uds.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tuniu.bi.umsj.base.constant.UdsConst;
+import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.vo.UdsPublishItemVO;
 import com.tuniu.bi.umsj.base.vo.UdsPublishListRequestVO;
 import com.tuniu.bi.umsj.base.vo.UdsPublishListResponseVO;
@@ -79,9 +80,18 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void updatePublish(UdsPublishVO udsPublishVO) {
+    public void updatePublish(UdsPublishVO udsPublishVO, String username) {
+        // 查询发布单的信息
+        UdsPublishEntity oldUdsPublishEntity = udsPublishMapper.findByPk(udsPublishVO.getId());
+        if (oldUdsPublishEntity == null) {
+            throw new CommonException("根据id[" + udsPublishVO.getId() + "]查询不到发布单信息");
+        }
+        if (!username.equals(oldUdsPublishEntity.getPublishUser())) {
+            throw new CommonException("对不起！您只能修改自己创建的发布单！");
+        }
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
-        BeanUtils.copyProperties(udsPublishVO, udsPublishEntity);
+        // 忽略字段有
+        BeanUtils.copyProperties(udsPublishVO, udsPublishEntity, "publishUser", "applyUser");
         int result = udsPublishMapper.update(udsPublishEntity);
         if (result > 0) {
             // 查询已有的发布项
@@ -91,7 +101,7 @@ public class UdsPublishServiceImpl implements UdsPublishService {
             List<UdsPublishItemVO> udsPublishItemList = udsPublishVO.getUdsPublishItemList();
             for (UdsPublishItemVO tmp : udsPublishItemList) {
                 UdsPublishItemEntity udsPublishItemEntity = new UdsPublishItemEntity();
-                BeanUtils.copyProperties(tmp,udsPublishItemEntity);
+                BeanUtils.copyProperties(tmp, udsPublishItemEntity);
                 if (udsPublishItemEntity.getId() == null) {
                     // 新增
                     udsPublishItemEntity.setState(UdsConst.UDS_PUBLISH_ITEM_CREATE);
