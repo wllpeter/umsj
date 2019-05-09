@@ -17,7 +17,6 @@ public class RoleItem {
     @NotEmpty(message = "菜单不能为空")
     private List<String> menus;
 
-    @NotEmpty(message = "子菜单不能为空")
     private List<String> subMenus;
 
     @NotEmpty(message = "操作权限不能为空")
