@@ -22,7 +22,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * @author zhangwei21
+ */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private UserService userService;
@@ -62,7 +66,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                         }
                     }
                 }
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                List<GrantedAuthority> list = authorities.stream().distinct().collect(Collectors.toList());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, list);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {

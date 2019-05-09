@@ -2,7 +2,6 @@ package com.tuniu.bi.umsj.base.controller.api;
 
 import com.tuniu.bi.umsj.base.dao.entity.UserEntity;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.service.OaClientService;
 import com.tuniu.bi.umsj.base.service.UserService;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
@@ -12,16 +11,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,6 +81,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "pageSize", dataType = "int", dataTypeClass = Integer.class, value = "每页数量", paramType = "query"),
     })
     @RequestMapping(value = "/findMany", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all', 'privilege_read')")
     public Response<UserListResponseVO> findMany(@RequestParam(value = "username", required = false) String username,
                                                  @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
@@ -109,6 +106,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "创建用户", notes = "创建用户")
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all')")
     public Response createUser(@RequestBody @Valid UserRequestVO requestVO) throws AbstractException {
         userService.init(requestVO.getUsername(), requestVO.getRoleCodes());
         return ResponseUtils.success("用户创建成功");
@@ -123,6 +121,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'privilege_all')")
     public Response updateUser(@RequestBody @Valid UserUpdateRequestVO requestVO) {
         userService.updateUser(requestVO);
         return ResponseUtils.success("用户更新成功");

@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangwei21
@@ -68,11 +69,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                     }
                 }
             }
+
         } catch (Exception e) {
             throw new BadCredentialsException(e.getMessage(), e);
         }
+        List<GrantedAuthority> list = authorities.stream().distinct().collect(Collectors.toList());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authorities);
+                new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), list);
         return usernamePasswordAuthenticationToken;
     }
 
