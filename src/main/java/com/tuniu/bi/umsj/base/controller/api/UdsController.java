@@ -51,11 +51,11 @@ public class UdsController extends BaseController {
                                                           @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize,
                                                           @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
                                                           @RequestParam(name = "order", defaultValue = "DESC") String order,
-                                                          @RequestParam(name = "applyUser") String applyUser,
-                                                          @RequestParam(name = "jiraId") String jiraId,
-                                                          @RequestParam(name = "publishUser") String publishUser,
-                                                          @RequestParam(name = "status") Integer status,
-                                                          @RequestParam(name = "title") String title) {
+                                                          @RequestParam(name = "applyUser", required = false) String applyUser,
+                                                          @RequestParam(name = "jiraId", required = false) String jiraId,
+                                                          @RequestParam(name = "publishUser", required = false) String publishUser,
+                                                          @RequestParam(name = "status", required = false) Integer status,
+                                                          @RequestParam(name = "title", required = false) String title) {
         UdsPublishListRequestVO udsPublishListRequestVO = new UdsPublishListRequestVO(pageNum, pageSize, sortBy, order, applyUser, publishUser, status, jiraId, title);
         UdsPublishListResponseVO udsPublishListResponseVO = udsPublishService.findMany(udsPublishListRequestVO);
         return ResponseUtils.success(udsPublishListResponseVO);
