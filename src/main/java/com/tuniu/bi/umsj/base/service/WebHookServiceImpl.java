@@ -26,11 +26,7 @@ public class WebHookServiceImpl implements WebHookService {
     private List<String> biPlatform = Arrays.asList(
             "bianyuqiu",
             "lujian2",
-            "wangjun9",
-            "haozhichao",
-//            "weiliangliang",
-            "zhangwei21"
-//            "zhangzheming"
+            "wangjun9"
     );
 
     private List<String> msgType = Arrays.asList(
