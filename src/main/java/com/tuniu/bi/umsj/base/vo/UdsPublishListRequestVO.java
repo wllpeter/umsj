@@ -15,6 +15,18 @@ public class UdsPublishListRequestVO extends BaseListRequestVO {
 
     private String title;
 
+    public UdsPublishListRequestVO() {
+    }
+
+    public UdsPublishListRequestVO(Integer pageNum, Integer pageSize, String sortBy, String order, String applyUser, String publishUser, Integer status, String jiraId, String title) {
+        super(pageNum, pageSize, sortBy, order);
+        this.applyUser = applyUser;
+        this.publishUser = publishUser;
+        this.status = status;
+        this.jiraId = jiraId;
+        this.title = title;
+    }
+
     public String getApplyUser() {
         return applyUser;
     }

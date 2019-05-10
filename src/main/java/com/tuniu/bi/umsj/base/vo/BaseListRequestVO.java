@@ -13,6 +13,16 @@ public class BaseListRequestVO {
 
     private String order;
 
+    public BaseListRequestVO() {
+    }
+
+    public BaseListRequestVO(Integer pageNum, Integer pageSize, String sortBy, String order) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.sortBy = sortBy;
+        this.order = order;
+    }
+
     public Integer getPageNum() {
         return pageNum;
     }
