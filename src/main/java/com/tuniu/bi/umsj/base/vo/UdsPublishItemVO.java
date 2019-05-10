@@ -1,8 +1,5 @@
 package com.tuniu.bi.umsj.base.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import javax.validation.constraints.NotBlank;
 
 public class UdsPublishItemVO {

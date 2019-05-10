@@ -21,7 +21,7 @@ public class UmsjWebApplication {
         SpringApplication.run(UmsjWebApplication.class, args);
     }
 
-    @RequestLimit(count = 5)
+    //@RequestLimit(count = 5)
     @RequestMapping("/api/ping")
     public String ping() {
         // 获取jdk版本号
