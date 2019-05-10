@@ -1,9 +1,7 @@
 package com.tuniu.bi.umsj.uds.service;
 
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListRequestVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListResponseVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishVO;
+import com.tuniu.bi.umsj.base.vo.*;
 
 /**
  * @author zhangwei21
@@ -19,15 +17,15 @@ public interface UdsPublishService {
 
     /**
      * 创建发布单
-     * @param udsPublishVO
+     * @param requestVO
      */
-    void createPublish(UdsPublishVO udsPublishVO);
+    void createPublish(CreateUdsRequestVO requestVO);
 
     /**
      * 更新发布单内容
-     * @param udsPublishVO
+     * @param updateUdsRequestVO
      */
-    void updatePublish(UdsPublishVO udsPublishVO, String username) throws AbstractException;
+    void updatePublish(UpdateUdsRequestVO updateUdsRequestVO, String username) throws AbstractException;
 
     /**
      * 更新发布单的状态

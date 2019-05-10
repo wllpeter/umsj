@@ -6,10 +6,7 @@ import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
-import com.tuniu.bi.umsj.base.vo.Response;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListRequestVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListResponseVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishVO;
+import com.tuniu.bi.umsj.base.vo.*;
 import com.tuniu.bi.umsj.uds.service.UdsPublishService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,27 +61,28 @@ public class UdsController extends BaseController {
     /**
      * 创建发布单
      *
-     * @param udsPublishVO
+     * @param requestVO
      * @return
      * @throws AbstractException
      */
     @ApiOperation(value = "创建发布单", notes = "创建发布单接口")
     @RequestMapping(value = "/createPublish", method = RequestMethod.POST)
-    public Response createPublish(@RequestBody @Valid UdsPublishVO udsPublishVO) {
-        udsPublishService.createPublish(udsPublishVO);
+    public Response createPublish(@RequestBody @Valid CreateUdsRequestVO requestVO) {
+        udsPublishService.createPublish(requestVO);
         return ResponseUtils.success();
     }
 
     /**
      * 更新发布单内容
      *
-     * @param udsPublishVO
+     * @param updateUdsRequestVO
+     * @param request
      * @return
      * @throws AbstractException
      */
     @RequestMapping(value = "/updatePublish", method = RequestMethod.POST)
-    public Response updatePublish(@RequestBody @Valid UdsPublishVO udsPublishVO, HttpServletRequest request) throws AbstractException {
-        udsPublishService.updatePublish(udsPublishVO, getUsernameFromToken(request));
+    public Response updatePublish(@RequestBody @Valid UpdateUdsRequestVO updateUdsRequestVO, HttpServletRequest request) throws AbstractException {
+        udsPublishService.updatePublish(updateUdsRequestVO, getUsernameFromToken(request));
         return ResponseUtils.success();
     }
 

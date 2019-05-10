@@ -4,10 +4,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-/**
- * @author zhangwei21
- */
-public class CreateUdsRequestVO {
+public class UpdateUdsRequestVO {
+
+    private Integer id;
 
     @NotBlank(message = "发布单主题不能为空")
     private String title;
@@ -16,12 +15,6 @@ public class CreateUdsRequestVO {
     private String jiraId;
 
     private Integer sysType;
-
-    private Integer publishType;
-
-    private String codeType;
-
-    private String codePath;
 
     private String affectedData;
 
@@ -32,14 +25,17 @@ public class CreateUdsRequestVO {
 
     private String errRollback;
 
-    private String memo;
-
-    private String publishUser;
-
-    private String applyUser;
-
     @NotEmpty(message = "发布代码不能为空")
-    private List<CreateUdsPublishItemVO> udsPublishItemList;
+    private List<UdsPublishItemVO> udsPublishItemList;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -63,30 +59,6 @@ public class CreateUdsRequestVO {
 
     public void setSysType(Integer sysType) {
         this.sysType = sysType;
-    }
-
-    public Integer getPublishType() {
-        return publishType;
-    }
-
-    public void setPublishType(Integer publishType) {
-        this.publishType = publishType;
-    }
-
-    public String getCodeType() {
-        return codeType;
-    }
-
-    public void setCodeType(String codeType) {
-        this.codeType = codeType;
-    }
-
-    public String getCodePath() {
-        return codePath;
-    }
-
-    public void setCodePath(String codePath) {
-        this.codePath = codePath;
     }
 
     public String getAffectedData() {
@@ -121,35 +93,11 @@ public class CreateUdsRequestVO {
         this.errRollback = errRollback;
     }
 
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public String getPublishUser() {
-        return publishUser;
-    }
-
-    public void setPublishUser(String publishUser) {
-        this.publishUser = publishUser;
-    }
-
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
-    }
-
-    public List<CreateUdsPublishItemVO> getUdsPublishItemList() {
+    public List<UdsPublishItemVO> getUdsPublishItemList() {
         return udsPublishItemList;
     }
 
-    public void setUdsPublishItemList(List<CreateUdsPublishItemVO> udsPublishItemList) {
+    public void setUdsPublishItemList(List<UdsPublishItemVO> udsPublishItemList) {
         this.udsPublishItemList = udsPublishItemList;
     }
 }

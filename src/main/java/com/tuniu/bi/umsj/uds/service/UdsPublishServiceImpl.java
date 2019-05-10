@@ -5,10 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.tuniu.bi.umsj.base.constant.UdsConst;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
-import com.tuniu.bi.umsj.base.vo.UdsPublishItemVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListRequestVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishListResponseVO;
-import com.tuniu.bi.umsj.base.vo.UdsPublishVO;
+import com.tuniu.bi.umsj.base.vo.*;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishEntity;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishItemEntity;
 import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishItemParamEntity;
@@ -59,15 +56,15 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void createPublish(UdsPublishVO udsPublishVO) {
+    public void createPublish(CreateUdsRequestVO requestVO) {
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
-        BeanUtils.copyProperties(udsPublishVO, udsPublishEntity);
+        BeanUtils.copyProperties(requestVO, udsPublishEntity);
         udsPublishEntity.setStatus(UdsConst.UDS_PUBLISH_CREATE);
-        List<UdsPublishItemVO> udsPublishItemList = udsPublishVO.getUdsPublishItemList();
+        List<CreateUdsPublishItemVO> udsPublishItemList = requestVO.getUdsPublishItemList();
         int result = udsPublishMapper.insert(udsPublishEntity);
         // 外部发布单插入成功，插入子的item项目
         if (result > 0) {
-            for (UdsPublishItemVO udsPublishItemVO : udsPublishItemList) {
+            for (CreateUdsPublishItemVO udsPublishItemVO : udsPublishItemList) {
                 UdsPublishItemEntity udsPublishItemEntity = new UdsPublishItemEntity();
                 BeanUtils.copyProperties(udsPublishItemVO, udsPublishItemEntity);
                 udsPublishItemEntity.setPublishId(udsPublishEntity.getId());
@@ -78,31 +75,32 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void updatePublish(UdsPublishVO udsPublishVO, String username) throws AbstractException {
+    public void updatePublish(UpdateUdsRequestVO updateUdsRequestVO, String username) throws AbstractException {
         // 查询发布单的信息
-        UdsPublishEntity oldUdsPublishEntity = udsPublishMapper.findByPk(udsPublishVO.getId());
+        UdsPublishEntity oldUdsPublishEntity = udsPublishMapper.findByPk(updateUdsRequestVO.getId());
         if (oldUdsPublishEntity == null) {
-            throw new CommonException("根据id[" + udsPublishVO.getId() + "]查询不到发布单信息");
+            throw new CommonException("根据id[" + updateUdsRequestVO.getId() + "]查询不到发布单信息");
         }
         if (!username.equals(oldUdsPublishEntity.getPublishUser())) {
             throw new CommonException("对不起！您只能修改自己创建的发布单！");
         }
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
         // 忽略字段有
-        BeanUtils.copyProperties(udsPublishVO, udsPublishEntity, "publishUser", "applyUser");
+        BeanUtils.copyProperties(updateUdsRequestVO, udsPublishEntity);
         int result = udsPublishMapper.update(udsPublishEntity);
         if (result > 0) {
             // 查询已有的发布项
             UdsPublishItemParamEntity udsPublishItemParamEntity = new UdsPublishItemParamEntity();
             udsPublishItemParamEntity.setPublishId(udsPublishEntity.getId());
             List<UdsPublishItemEntity> many = udsPublishItemMapper.findMany(udsPublishItemParamEntity);
-            List<UdsPublishItemVO> udsPublishItemList = udsPublishVO.getUdsPublishItemList();
+            List<UdsPublishItemVO> udsPublishItemList = updateUdsRequestVO.getUdsPublishItemList();
             for (UdsPublishItemVO tmp : udsPublishItemList) {
                 UdsPublishItemEntity udsPublishItemEntity = new UdsPublishItemEntity();
                 BeanUtils.copyProperties(tmp, udsPublishItemEntity);
                 if (udsPublishItemEntity.getId() == null) {
                     // 新增
                     udsPublishItemEntity.setState(UdsConst.UDS_PUBLISH_ITEM_CREATE);
+                    udsPublishItemEntity.setPublishId(oldUdsPublishEntity.getId());
                     udsPublishItemMapper.insert(udsPublishItemEntity);
                 } else {
                     // 更新
