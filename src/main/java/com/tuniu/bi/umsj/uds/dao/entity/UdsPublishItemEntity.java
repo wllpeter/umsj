@@ -18,6 +18,20 @@ public class UdsPublishItemEntity {
 
     private String updatedAt;
 
+    public UdsPublishItemEntity() {
+    }
+
+    public UdsPublishItemEntity(Integer id, Integer publishId, String codeType,
+                                String codePath, Integer state, String createdAt, String updatedAt) {
+        this.id = id;
+        this.publishId = publishId;
+        this.codeType = codeType;
+        this.codePath = codePath;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Integer getId() {
         return id;
     }

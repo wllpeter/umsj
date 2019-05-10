@@ -1,5 +1,8 @@
 package com.tuniu.bi.umsj.uds.dao.entity;
 
+/**
+ * @author zhangwei21
+ */
 public class UdsPublishParamEntity {
     private Integer id;
 
@@ -30,6 +33,31 @@ public class UdsPublishParamEntity {
     private String applyUser;
 
     private Integer status;
+
+    public UdsPublishParamEntity() {
+    }
+
+    public UdsPublishParamEntity(Integer id, String title, String jiraId, Integer sysType,
+                                 Integer publishType, String codeType, String codePath,
+                                 String affectedData, String reviewBoardUrl, String publishStep,
+                                 String errRollback, String memo, String publishUser,
+                                 String applyUser, Integer status) {
+        this.id = id;
+        this.title = title;
+        this.jiraId = jiraId;
+        this.sysType = sysType;
+        this.publishType = publishType;
+        this.codeType = codeType;
+        this.codePath = codePath;
+        this.affectedData = affectedData;
+        this.reviewBoardUrl = reviewBoardUrl;
+        this.publishStep = publishStep;
+        this.errRollback = errRollback;
+        this.memo = memo;
+        this.publishUser = publishUser;
+        this.applyUser = applyUser;
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

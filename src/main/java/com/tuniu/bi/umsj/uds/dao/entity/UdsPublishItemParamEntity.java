@@ -14,6 +14,17 @@ public class UdsPublishItemParamEntity {
 
     private Integer state;
 
+    public UdsPublishItemParamEntity() {
+    }
+
+    public UdsPublishItemParamEntity(Integer id, Integer publishId, String codeType, String codePath, Integer state) {
+        this.id = id;
+        this.publishId = publishId;
+        this.codeType = codeType;
+        this.codePath = codePath;
+        this.state = state;
+    }
+
     public Integer getId() {
         return id;
     }

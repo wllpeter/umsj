@@ -47,10 +47,7 @@ public class UdsPublishServiceImpl implements UdsPublishService {
         udsPublishParamEntity.setStatus(udsPublishQueryVO.getStatus());
         List<UdsPublishEntity> many = udsPublishMapper.findMany(udsPublishParamEntity);
         PageInfo pageInfo = new PageInfo(many, udsPublishQueryVO.getPageSize());
-        udsPublishListResponseVO.setPageNum(udsPublishQueryVO.getPageNum());
-        udsPublishListResponseVO.setPageSize(udsPublishQueryVO.getPageSize());
-        udsPublishListResponseVO.setTotal(pageInfo.getTotal());
-        udsPublishListResponseVO.setPages(pageInfo.getPages());
+        udsPublishListResponseVO.injectPageInfo(pageInfo);
         List<UdsPublishVO> list = new ArrayList<>();
         for (UdsPublishEntity udsPublishEntity : many) {
             UdsPublishVO item = new UdsPublishVO();
