@@ -29,7 +29,8 @@ public interface UdsPublishService {
 
     /**
      * 更新发布单的状态
-     * @param udsPublishVO
+     * @param updateUdsStatusRequestVO
+     * @param username
      */
-    void updatePublishStatus(UdsPublishVO udsPublishVO) throws AbstractException;
+    void updatePublishStatus(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException;
 }

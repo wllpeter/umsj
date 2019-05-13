@@ -125,10 +125,44 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void updatePublishStatus(UdsPublishVO udsPublishVO) {
+    public void updatePublishStatus(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException{
+        if (UdsConst.UDS_PUBLISH_WAIT_APPROVE == updateUdsStatusRequestVO.getStatus()){
+            // 申请审核，校验当前的发布人员是否和username一致
+
+        }
+        // 更新发布单的状态
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
-        udsPublishEntity.setStatus(udsPublishVO.getStatus());
-        udsPublishEntity.setId(udsPublishVO.getId());
+        udsPublishEntity.setStatus(updateUdsStatusRequestVO.getStatus());
+        udsPublishEntity.setId(updateUdsStatusRequestVO.getId());
         udsPublishMapper.update(udsPublishEntity);
+        // 记录发布日志
+
+    }
+
+    private void checkUpdatePublish(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException {
+        // 查询发布单是否存在
+        UdsPublishEntity byPk = udsPublishMapper.findByPk(updateUdsStatusRequestVO.getId());
+        if (byPk == null) {
+            throw new CommonException("当前发布单不存在");
+        }
+        // 提交审核
+        if (UdsConst.UDS_PUBLISH_WAIT_APPROVE == updateUdsStatusRequestVO.getStatus()) {
+            // 只有新建状态和审核不通过才能发起审核
+            if (!(UdsConst.UDS_PUBLISH_CREATE == byPk.getStatus() || UdsConst.UDS_PUBLISH_APPROVE_FAILED == byPk.getStatus())) {
+                throw new CommonException("当前状态不允许更新发布单");
+            }
+            if (username.equals(byPk.getPublishUser())) {
+                throw new CommonException("当前发布单的发布人与操作人不一致");
+            }
+        } else if (UdsConst.UDS_PUBLISH_APPROVE_SUCCESS == updateUdsStatusRequestVO.getStatus() ||
+                UdsConst.UDS_PUBLISH_APPROVE_FAILED == updateUdsStatusRequestVO.getStatus()){
+            // 只有待审核状态才能审核
+            if (!(UdsConst.UDS_PUBLISH_WAIT_APPROVE == byPk.getStatus())) {
+                throw new CommonException("当前状态不允许更新发布单");
+            }
+            if (!username.equals(byPk.getApplyUser())) {
+                throw new CommonException("当前发布单的审核人与操作人不一致");
+            }
+        }
     }
 }

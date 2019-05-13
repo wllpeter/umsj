@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuniu.bi.umsj.uds.dao.mapper.UdsPublishLogMapper">
+    <resultMap id="BaseResultMap" type="com.tuniu.bi.umsj.uds.dao.entity.UdsPublishLogEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="publish_id" jdbcType="INTEGER" property="publishId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="data" jdbcType="VARCHAR" property="data"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, publish_id, content, data, created_at
+    </sql>
+    <insert id="insert" parameterType="com.tuniu.bi.umsj.uds.dao.entity.UdsPublishLogEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO uds_publish_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="publishId != null">
+                publish_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="data != null">
+                data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="publishId != null">
+                #{publishId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="data != null">
+                #{data,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -1,17 +1,13 @@
-package com.tuniu.bi.umsj.base.controller.api;
+package com.tuniu.bi.umsj.uds.controller.api;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.tuniu.bi.umsj.base.annotation.RequestData;
+import com.tuniu.bi.umsj.base.controller.api.BaseController;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
-import com.tuniu.bi.umsj.base.exception.CommonException;
-import com.tuniu.bi.umsj.base.utils.JwtUtils;
 import com.tuniu.bi.umsj.base.utils.ResponseUtils;
 import com.tuniu.bi.umsj.base.vo.*;
 import com.tuniu.bi.umsj.uds.service.UdsPublishService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,15 +85,12 @@ public class UdsController extends BaseController {
     /**
      * 更新发布单状态
      *
-     * @param udsPublishVO
+     * @param updateUdsStatusRequstVO
      * @return
      * @throws AbstractException
      */
-    public Response updatePublishStatus(@RequestBody UdsPublishVO udsPublishVO) throws AbstractException {
-        if (udsPublishVO == null || udsPublishVO.getId() == null || udsPublishVO.getStatus() == null) {
-            throw new CommonException("参数错误");
-        }
-        udsPublishService.updatePublishStatus(udsPublishVO);
+    public Response updatePublishStatus(@RequestBody @Valid UpdateUdsStatusRequestVO updateUdsStatusRequstVO, HttpServletRequest request) throws AbstractException {
+        udsPublishService.updatePublishStatus(updateUdsStatusRequstVO, getUsernameFromToken(request));
         return ResponseUtils.success();
     }
 }
