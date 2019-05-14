@@ -103,6 +103,7 @@ public class UdsController extends BaseController {
      * @return
      * @throws AbstractException
      */
+    @ApiOperation(value = "发布单详情", notes = "发布单详情接口")
     @RequestMapping(value = "/publishDetail", method = RequestMethod.GET)
     public UdsPublishVO publishDetail(@RequestParam Integer id) throws AbstractException {
         return udsPublishService.publishDetail(id);

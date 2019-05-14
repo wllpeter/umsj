@@ -33,9 +33,9 @@ public class UdsPublishEntity {
 
     private Integer status;
 
-    private Date createdAt;
+    private String createdAt;
 
-    private Date updatedAt;
+    private String updatedAt;
 
     public UdsPublishEntity() {
     }
@@ -43,7 +43,7 @@ public class UdsPublishEntity {
     public UdsPublishEntity(Integer id, String title, String jiraId, Integer sysType, Integer publishType,
                             String codeType, String codePath, String affectedData, String reviewBoardUrl,
                             String publishStep, String errRollback, String memo, String publishUser,
-                            String applyUser, Integer status, Date createdAt, Date updatedAt) {
+                            String applyUser, Integer status, String createdAt, String updatedAt) {
         this.id = id;
         this.title = title;
         this.jiraId = jiraId;
@@ -183,19 +183,19 @@ public class UdsPublishEntity {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
