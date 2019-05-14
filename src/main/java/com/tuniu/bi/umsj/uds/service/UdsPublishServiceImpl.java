@@ -79,18 +79,11 @@ public class UdsPublishServiceImpl implements UdsPublishService {
         udsPublishEntity.setPublishUser(username);
         udsPublishEntity.setStatus(UdsConst.UDS_PUBLISH_CREATE);
         udsPublishEntity.setApplyUser(APPLY_USER);
-//        // 外部发布单插入成功，插入子的item项目
-        List<String> codePaths = requestVO.getCodePaths();
-        List<String> codeTypes = requestVO.getCodeTypes();
-        if (codePaths.size() != codeTypes.size()) {
-            throw new CommonException("创建发布单参数错误");
-        }
         int result = udsPublishMapper.insert(udsPublishEntity);
         if (result > 0) {
-            for (int i = 0; i < codeTypes.size(); i++) {
+            for (CreateUdsPublishItemVO createUdsPublishItemVO : requestVO.getUdsPublishItemList()) {
                 UdsPublishItemEntity udsPublishItemEntity = new UdsPublishItemEntity();
-                udsPublishItemEntity.setCodeType(codeTypes.get(i));
-                udsPublishItemEntity.setCodePath(codePaths.get(i));
+                BeanUtils.copyProperties(createUdsPublishItemVO, udsPublishItemEntity);
                 udsPublishItemEntity.setPublishId(udsPublishEntity.getId());
                 udsPublishItemEntity.setState(UdsConst.UDS_PUBLISH_ITEM_CREATE);
                 udsPublishItemMapper.insert(udsPublishItemEntity);

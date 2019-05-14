@@ -15,12 +15,6 @@ public class CreateUdsRequestVO {
     @NotBlank(message = "jira单号不能为空")
     private String jiraId;
 
-    @NotEmpty
-    private List<String> codeTypes;
-
-    @NotEmpty
-    private List<String> codePaths;
-
     private String affectedData;
 
     @NotBlank(message = "ReviewBoard地址不能为空")
@@ -31,6 +25,10 @@ public class CreateUdsRequestVO {
     private String errRollback;
 
     private String memo;
+
+    @NotEmpty(message = "发布代码不能为空")
+    private List<CreateUdsPublishItemVO> udsPublishItemList;
+
 
     public String getTitle() {
         return title;
@@ -46,22 +44,6 @@ public class CreateUdsRequestVO {
 
     public void setJiraId(String jiraId) {
         this.jiraId = jiraId;
-    }
-
-    public List<String> getCodeTypes() {
-        return codeTypes;
-    }
-
-    public void setCodeTypes(List<String> codeTypes) {
-        this.codeTypes = codeTypes;
-    }
-
-    public List<String> getCodePaths() {
-        return codePaths;
-    }
-
-    public void setCodePaths(List<String> codePaths) {
-        this.codePaths = codePaths;
     }
 
     public String getAffectedData() {
@@ -104,4 +86,11 @@ public class CreateUdsRequestVO {
         this.memo = memo;
     }
 
+    public List<CreateUdsPublishItemVO> getUdsPublishItemList() {
+        return udsPublishItemList;
+    }
+
+    public void setUdsPublishItemList(List<CreateUdsPublishItemVO> udsPublishItemList) {
+        this.udsPublishItemList = udsPublishItemList;
+    }
 }
