@@ -9,4 +9,20 @@ public class CreateUdsPublishItemVO {
 
     @NotBlank(message = "代码路径不能为空")
     private String codePath;
+
+    public String getCodeType() {
+        return codeType;
+    }
+
+    public void setCodeType(String codeType) {
+        this.codeType = codeType;
+    }
+
+    public String getCodePath() {
+        return codePath;
+    }
+
+    public void setCodePath(String codePath) {
+        this.codePath = codePath;
+    }
 }
