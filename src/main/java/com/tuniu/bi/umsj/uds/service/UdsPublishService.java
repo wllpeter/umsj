@@ -18,8 +18,9 @@ public interface UdsPublishService {
     /**
      * 创建发布单
      * @param requestVO
+     * @param username
      */
-    void createPublish(CreateUdsRequestVO requestVO);
+    void createPublish(CreateUdsRequestVO requestVO, String username) throws AbstractException;
 
     /**
      * 更新发布单内容
@@ -33,4 +34,10 @@ public interface UdsPublishService {
      * @param username
      */
     void updatePublishStatus(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException;
+
+    /**
+     * uds详情接口
+     * @param id
+     */
+    UdsPublishVO publishDetail(Integer id) throws AbstractException;
 }

@@ -58,13 +58,14 @@ public class UdsController extends BaseController {
      * 创建发布单
      *
      * @param requestVO
+     * @param request
      * @return
      * @throws AbstractException
      */
     @ApiOperation(value = "创建发布单", notes = "创建发布单接口")
     @RequestMapping(value = "/createPublish", method = RequestMethod.POST)
-    public Response createPublish(@RequestBody @Valid CreateUdsRequestVO requestVO) {
-        udsPublishService.createPublish(requestVO);
+    public Response createPublish(@RequestBody @Valid CreateUdsRequestVO requestVO, HttpServletRequest request) throws AbstractException {
+        udsPublishService.createPublish(requestVO, getUsernameFromToken(request));
         return ResponseUtils.success();
     }
 
@@ -89,8 +90,21 @@ public class UdsController extends BaseController {
      * @return
      * @throws AbstractException
      */
+    @RequestMapping(value = "/updatePublishStatus", method = RequestMethod.POST)
     public Response updatePublishStatus(@RequestBody @Valid UpdateUdsStatusRequestVO updateUdsStatusRequstVO, HttpServletRequest request) throws AbstractException {
         udsPublishService.updatePublishStatus(updateUdsStatusRequstVO, getUsernameFromToken(request));
         return ResponseUtils.success();
+    }
+
+    /**
+     * 查看发布单详情接口
+     *
+     * @param id
+     * @return
+     * @throws AbstractException
+     */
+    @RequestMapping(value = "/publishDetail", method = RequestMethod.GET)
+    public UdsPublishVO publishDetail(@RequestParam Integer id) throws AbstractException {
+        return udsPublishService.publishDetail(id);
     }
 }

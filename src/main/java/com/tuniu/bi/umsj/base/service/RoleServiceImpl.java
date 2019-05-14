@@ -15,6 +15,7 @@ import com.tuniu.bi.umsj.base.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public int createRole(CreateRoleReqeustVO reqeustVO) throws AbstractException {
         // 查询roleCode是否已经存在
         RolesParamEntity rolesParamEntity = new RolesParamEntity();
@@ -96,6 +98,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public int updateRole(UpdateRoleRequestVO requestVO) throws AbstractException {
         // 根据id查询
         RolesEntity one = rolesMapper.findByPk(requestVO.getId());
@@ -119,6 +122,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public int deleteRole(Integer id) throws AbstractException {
         //  查询改角色有没有被占用
         RolesEntity byPk = rolesMapper.findByPk(id);

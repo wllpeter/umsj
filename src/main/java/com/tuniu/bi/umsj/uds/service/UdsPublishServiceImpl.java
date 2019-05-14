@@ -1,20 +1,20 @@
 package com.tuniu.bi.umsj.uds.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tuniu.bi.umsj.base.constant.UdsConst;
 import com.tuniu.bi.umsj.base.exception.AbstractException;
 import com.tuniu.bi.umsj.base.exception.CommonException;
 import com.tuniu.bi.umsj.base.vo.*;
-import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishEntity;
-import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishItemEntity;
-import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishItemParamEntity;
-import com.tuniu.bi.umsj.uds.dao.entity.UdsPublishParamEntity;
+import com.tuniu.bi.umsj.uds.dao.entity.*;
 import com.tuniu.bi.umsj.uds.dao.mapper.UdsPublishItemMapper;
+import com.tuniu.bi.umsj.uds.dao.mapper.UdsPublishLogMapper;
 import com.tuniu.bi.umsj.uds.dao.mapper.UdsPublishMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,11 @@ public class UdsPublishServiceImpl implements UdsPublishService {
 
     @Autowired
     private UdsPublishItemMapper udsPublishItemMapper;
+
+    @Autowired
+    private UdsPublishLogMapper udsPublishLogMapper;
+
+    private static final String APPLY_USER = "zhangjingchao";
 
     @Override
     public UdsPublishListResponseVO findMany(UdsPublishListRequestVO udsPublishQueryVO) {
@@ -56,25 +61,40 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void createPublish(CreateUdsRequestVO requestVO) {
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
+    public void createPublish(CreateUdsRequestVO requestVO, String username) throws AbstractException {
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
         BeanUtils.copyProperties(requestVO, udsPublishEntity);
+        udsPublishEntity.setPublishUser(username);
         udsPublishEntity.setStatus(UdsConst.UDS_PUBLISH_CREATE);
-        List<CreateUdsPublishItemVO> udsPublishItemList = requestVO.getUdsPublishItemList();
+        udsPublishEntity.setApplyUser(APPLY_USER);
+//        // 外部发布单插入成功，插入子的item项目
+        List<String> codePaths = requestVO.getCodePaths();
+        List<String> codeTypes = requestVO.getCodeTypes();
+        if (codePaths.size() != codeTypes.size()) {
+            throw new CommonException("创建发布单参数错误");
+        }
         int result = udsPublishMapper.insert(udsPublishEntity);
-        // 外部发布单插入成功，插入子的item项目
         if (result > 0) {
-            for (CreateUdsPublishItemVO udsPublishItemVO : udsPublishItemList) {
+            for (int i = 0; i < codeTypes.size(); i++) {
                 UdsPublishItemEntity udsPublishItemEntity = new UdsPublishItemEntity();
-                BeanUtils.copyProperties(udsPublishItemVO, udsPublishItemEntity);
+                udsPublishItemEntity.setCodeType(codeTypes.get(i));
+                udsPublishItemEntity.setCodePath(codePaths.get(i));
                 udsPublishItemEntity.setPublishId(udsPublishEntity.getId());
                 udsPublishItemEntity.setState(UdsConst.UDS_PUBLISH_ITEM_CREATE);
                 udsPublishItemMapper.insert(udsPublishItemEntity);
             }
         }
+        // 记录发布单表创建日志
+        UdsPublishLogEntity udsPublishLogEntity = new UdsPublishLogEntity();
+        udsPublishLogEntity.setPublishId(udsPublishEntity.getId());
+        udsPublishLogEntity.setContent(username + "创建了发布单");
+        udsPublishLogEntity.setData(JSONObject.toJSONString(requestVO));
+        udsPublishLogMapper.insert(udsPublishLogEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public void updatePublish(UpdateUdsRequestVO updateUdsRequestVO, String username) throws AbstractException {
         // 查询发布单的信息
         UdsPublishEntity oldUdsPublishEntity = udsPublishMapper.findByPk(updateUdsRequestVO.getId());
@@ -125,10 +145,11 @@ public class UdsPublishServiceImpl implements UdsPublishService {
     }
 
     @Override
-    public void updatePublishStatus(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException{
-        if (UdsConst.UDS_PUBLISH_WAIT_APPROVE == updateUdsStatusRequestVO.getStatus()){
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
+    public void updatePublishStatus(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException {
+        if (UdsConst.UDS_PUBLISH_WAIT_APPROVE == updateUdsStatusRequestVO.getStatus()) {
             // 申请审核，校验当前的发布人员是否和username一致
-
+            checkUpdatePublish(updateUdsStatusRequestVO, username);
         }
         // 更新发布单的状态
         UdsPublishEntity udsPublishEntity = new UdsPublishEntity();
@@ -136,7 +157,12 @@ public class UdsPublishServiceImpl implements UdsPublishService {
         udsPublishEntity.setId(updateUdsStatusRequestVO.getId());
         udsPublishMapper.update(udsPublishEntity);
         // 记录发布日志
-
+        UdsPublishLogEntity udsPublishLogEntity = new UdsPublishLogEntity();
+        udsPublishLogEntity.setPublishId(updateUdsStatusRequestVO.getId());
+        udsPublishLogEntity.setPublishId(udsPublishEntity.getId());
+        udsPublishLogEntity.setContent(username + "创建了发布单");
+        udsPublishLogEntity.setData(JSONObject.toJSONString(updateUdsStatusRequestVO));
+        udsPublishLogMapper.insert(udsPublishLogEntity);
     }
 
     private void checkUpdatePublish(UpdateUdsStatusRequestVO updateUdsStatusRequestVO, String username) throws AbstractException {
@@ -155,7 +181,7 @@ public class UdsPublishServiceImpl implements UdsPublishService {
                 throw new CommonException("当前发布单的发布人与操作人不一致");
             }
         } else if (UdsConst.UDS_PUBLISH_APPROVE_SUCCESS == updateUdsStatusRequestVO.getStatus() ||
-                UdsConst.UDS_PUBLISH_APPROVE_FAILED == updateUdsStatusRequestVO.getStatus()){
+                UdsConst.UDS_PUBLISH_APPROVE_FAILED == updateUdsStatusRequestVO.getStatus()) {
             // 只有待审核状态才能审核
             if (!(UdsConst.UDS_PUBLISH_WAIT_APPROVE == byPk.getStatus())) {
                 throw new CommonException("当前状态不允许更新发布单");
@@ -164,5 +190,27 @@ public class UdsPublishServiceImpl implements UdsPublishService {
                 throw new CommonException("当前发布单的审核人与操作人不一致");
             }
         }
+    }
+
+    @Override
+    public UdsPublishVO publishDetail(Integer id) throws AbstractException {
+        UdsPublishEntity byPk = udsPublishMapper.findByPk(id);
+        if (byPk == null) {
+            throw new CommonException("根据ID查询不到对应的发布");
+        }
+        UdsPublishVO udsPublishVO = new UdsPublishVO();
+        BeanUtils.copyProperties(byPk, udsPublishVO);
+        // 根据publishId查询item
+        UdsPublishItemParamEntity udsPublishItemParamEntity = new UdsPublishItemParamEntity();
+        udsPublishItemParamEntity.setPublishId(id);
+        List<UdsPublishItemEntity> many = udsPublishItemMapper.findMany(udsPublishItemParamEntity);
+        List<UdsPublishItemVO> list = new ArrayList<>();
+        for (UdsPublishItemEntity udsPublishItemEntity : many) {
+            UdsPublishItemVO udsPublishItemVO = new UdsPublishItemVO();
+            BeanUtils.copyProperties(udsPublishItemEntity, udsPublishItemVO);
+            list.add(udsPublishItemVO);
+        }
+        udsPublishVO.setUdsPublishItemList(list);
+        return udsPublishVO;
     }
 }

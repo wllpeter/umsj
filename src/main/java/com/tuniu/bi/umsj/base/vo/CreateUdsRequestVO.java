@@ -15,13 +15,11 @@ public class CreateUdsRequestVO {
     @NotBlank(message = "jira单号不能为空")
     private String jiraId;
 
-    private Integer sysType;
+    @NotEmpty
+    private List<String> codeTypes;
 
-    private Integer publishType;
-
-    private String codeType;
-
-    private String codePath;
+    @NotEmpty
+    private List<String> codePaths;
 
     private String affectedData;
 
@@ -33,13 +31,6 @@ public class CreateUdsRequestVO {
     private String errRollback;
 
     private String memo;
-
-    private String publishUser;
-
-    private String applyUser;
-
-    @NotEmpty(message = "发布代码不能为空")
-    private List<CreateUdsPublishItemVO> udsPublishItemList;
 
     public String getTitle() {
         return title;
@@ -57,36 +48,20 @@ public class CreateUdsRequestVO {
         this.jiraId = jiraId;
     }
 
-    public Integer getSysType() {
-        return sysType;
+    public List<String> getCodeTypes() {
+        return codeTypes;
     }
 
-    public void setSysType(Integer sysType) {
-        this.sysType = sysType;
+    public void setCodeTypes(List<String> codeTypes) {
+        this.codeTypes = codeTypes;
     }
 
-    public Integer getPublishType() {
-        return publishType;
+    public List<String> getCodePaths() {
+        return codePaths;
     }
 
-    public void setPublishType(Integer publishType) {
-        this.publishType = publishType;
-    }
-
-    public String getCodeType() {
-        return codeType;
-    }
-
-    public void setCodeType(String codeType) {
-        this.codeType = codeType;
-    }
-
-    public String getCodePath() {
-        return codePath;
-    }
-
-    public void setCodePath(String codePath) {
-        this.codePath = codePath;
+    public void setCodePaths(List<String> codePaths) {
+        this.codePaths = codePaths;
     }
 
     public String getAffectedData() {
@@ -129,27 +104,4 @@ public class CreateUdsRequestVO {
         this.memo = memo;
     }
 
-    public String getPublishUser() {
-        return publishUser;
-    }
-
-    public void setPublishUser(String publishUser) {
-        this.publishUser = publishUser;
-    }
-
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
-    }
-
-    public List<CreateUdsPublishItemVO> getUdsPublishItemList() {
-        return udsPublishItemList;
-    }
-
-    public void setUdsPublishItemList(List<CreateUdsPublishItemVO> udsPublishItemList) {
-        this.udsPublishItemList = udsPublishItemList;
-    }
 }

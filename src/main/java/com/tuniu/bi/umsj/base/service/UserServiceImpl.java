@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -66,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public UserEntity init(String username, String roleCodes) throws AbstractException {
         // 先查询用户是否在user表中存在
         UserEntity userEntity = userMapper.findByUsername(username);
@@ -186,6 +188,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = "umsTransactionManager")
     public int updateUser(UserUpdateRequestVO userUpdateReqeustVO) {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userUpdateReqeustVO, userEntity, "roleCodes");
