@@ -21,10 +21,6 @@ public class UdsPublishVO {
 
     private Integer publishType;
 
-    private String codeType;
-
-    private String codePath;
-
     private String affectedData;
 
     @NotBlank(message = "ReviewBoard地址不能为空")
@@ -87,22 +83,6 @@ public class UdsPublishVO {
 
     public void setPublishType(Integer publishType) {
         this.publishType = publishType;
-    }
-
-    public String getCodeType() {
-        return codeType;
-    }
-
-    public void setCodeType(String codeType) {
-        this.codeType = codeType;
-    }
-
-    public String getCodePath() {
-        return codePath;
-    }
-
-    public void setCodePath(String codePath) {
-        this.codePath = codePath;
     }
 
     public String getAffectedData() {
