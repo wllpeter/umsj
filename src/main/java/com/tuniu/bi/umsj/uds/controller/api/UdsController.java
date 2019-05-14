@@ -77,6 +77,7 @@ public class UdsController extends BaseController {
      * @return
      * @throws AbstractException
      */
+    @ApiOperation(value = "修改发布单", notes = "修改发布单接口")
     @RequestMapping(value = "/updatePublish", method = RequestMethod.POST)
     public Response updatePublish(@RequestBody @Valid UpdateUdsRequestVO updateUdsRequestVO, HttpServletRequest request) throws AbstractException {
         udsPublishService.updatePublish(updateUdsRequestVO, getUsernameFromToken(request));
