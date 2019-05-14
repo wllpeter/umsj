@@ -49,7 +49,7 @@
     <select id="findMany" resultMap="BaseResultMap" parameterType="com.tuniu.bi.umsj.uds.dao.entity.UdsPublishItemParamEntity">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM uds_publish
+        FROM uds_publish_item
         <where>
             <if test="publishId != null">AND publish_id = #{publishId}</if>
         </where>

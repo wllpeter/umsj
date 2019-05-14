@@ -51,9 +51,20 @@ public class UdsPublishServiceImpl implements UdsPublishService {
         PageInfo pageInfo = new PageInfo(many, udsPublishQueryVO.getPageSize());
         udsPublishListResponseVO.injectPageInfo(pageInfo);
         List<UdsPublishVO> list = new ArrayList<>();
+        UdsPublishItemParamEntity udsPublishItemParamEntity = new UdsPublishItemParamEntity();
         for (UdsPublishEntity udsPublishEntity : many) {
             UdsPublishVO item = new UdsPublishVO();
             BeanUtils.copyProperties(udsPublishEntity, item);
+            // 查询udspublishItem
+            udsPublishItemParamEntity.setPublishId(udsPublishEntity.getId());
+            List<UdsPublishItemEntity> items = udsPublishItemMapper.findMany(udsPublishItemParamEntity);
+            List<UdsPublishItemVO> voList = new ArrayList<>();
+            for (UdsPublishItemEntity udsPublishItemEntity: items) {
+                UdsPublishItemVO udsPublishItemVO = new UdsPublishItemVO();
+                BeanUtils.copyProperties(udsPublishItemEntity, udsPublishItemVO);
+                voList.add(udsPublishItemVO);
+            }
+            item.setUdsPublishItemList(voList);
             list.add(item);
         }
         udsPublishListResponseVO.setUdsPublishList(list);
