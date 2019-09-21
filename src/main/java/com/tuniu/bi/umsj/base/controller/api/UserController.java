@@ -41,7 +41,7 @@ public class UserController extends BaseController {
         String username = user.getUsername();
         String password = user.getPassword();
         // ldap 认证
-        oaClientService.checkOaAccount(username, password);
+//        oaClientService.checkOaAccount(username, password);
         // 自动创建账户信息
         UserEntity userEntity = userService.init(username);
         // 返回token
